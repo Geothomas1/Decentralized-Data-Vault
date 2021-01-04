@@ -101,7 +101,6 @@ const getAffiliation = async (org) => {
 }
 
 const registerUser = async (userorg, username, password) => {
-    console.log('In registerUser');
     let ccp = await getCCP(userorg);
     const caURL = await getCaUrl(userorg, ccp);
     const ca = new FabricCAServices(caURL);
@@ -193,60 +192,12 @@ const registerUser = async (userorg, username, password) => {
     }
 };
 
-const loginUser = async (userorg, username, password) => {
-    let ccp = await getCCP(userorg);
-    const caURL = await getCaUrl(userorg, ccp);
-    const ca = new FabricCAServices(caURL);
-    const walletPath = await getWalletPath(userorg);
-    const wallet = await Wallets.newFileSystemWallet(walletPath);
-    console.log(`Wallet path: ${walletPath}`);
-
-    const userIdentity = await wallet.get(username);
-    if (userIdentity) {
-        console.log(`An identity for the user ${username} exists in the wallet`);
-        try {
-            const connectOptions = {
-                wallet, identity: username, discovery: { enabled: true, asLocalhost: true },
-            };
-
-            const gateway = new Gateway();
-            await gateway.connect(ccp, connectOptions);
-
-            const network = await gateway.getNetwork('mychannel');
-
-            const contract = network.getContract('user');
-
-            let result = await contract.evaluateTransaction('queryUserById', username, password);
-            // let message = `Successfully added the user asset with key ${username}`;
-
-            await gateway.disconnect();
-
-            console.log(`Successfully added the user asset with key ${username} to the ledger`);
-
-            let response = {
-                // message: message,
-                result: JSON.parse(Buffer.from(result).toString('utf8')),
-                status: 200,
-            };
-            return response;
-        } catch (error) {
-            console.log(`Getting error: ${error}`);
-            return error.message;
-        }
-    } else {
-        console.log(`No identity for the user ${username} exists in the wallet`);
-        return {
-            success: true,
-            message: username + ' doesnot exists',
-            status: 209,
-        };
-    }
-};
-
-
 module.exports = {
     getCCP: getCCP,
+    getCaUrl: getCaUrl,
     getWalletPath: getWalletPath,
+    getCaInfo: getCaInfo,
+    enrollAdmin: enrollAdmin,
+    getAffiliation: getAffiliation,
     registerUser: registerUser,
-    loginUser: loginUser,
 }

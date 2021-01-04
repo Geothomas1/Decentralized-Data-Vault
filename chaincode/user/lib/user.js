@@ -94,11 +94,11 @@ class User extends Contract {
         console.info('============= END : Create User ===========');
     }
 
-    async queryUserById(ctx, userName, userPassword) {
+    async queryUserById(ctx, userName) {
         console.info('============= START : queryUserById ===========');
         const userAsBytes = await ctx.stub.getState(userName);
         if (!userAsBytes || userAsBytes.length === 0) {
-            throw new Error(`${carNumber} does not exist`);
+            return;
         }
         return userAsBytes.toString();
     }

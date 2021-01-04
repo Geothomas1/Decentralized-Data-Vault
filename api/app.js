@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const log4js = require('log4js');
 const logger = log4js.getLogger('BasicNetwork');
+const session = require('express-session');
 
 const host = "localhost";
 const port = "3000";
@@ -19,6 +20,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(session({
+  secret: 'decentralized data vault',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -32,3 +39,6 @@ http.createServer(app).listen(port, () => {
 
 const indexRouter = require('./routes/index');
 app.use('/', indexRouter);
+app.use('/test', (req, res)=>{
+    console.log("test", req.session);
+});

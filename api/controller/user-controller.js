@@ -1,4 +1,5 @@
 'use strict';
+const operator = require('../utils/operator');
 const helper = require('../utils/helper');
 
 function getErrorMessage(field) {
@@ -29,6 +30,11 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     console.log('In login', req.body);
-    let response = await helper.loginUser(req.body.orgname, req.body.username, req.body.password);
-    res.send(response);
+    let response = await operator.queryUserById(req.body.orgname, req.body.username, req.body.username);
+    if(response){
+        console.log('result', response);
+    }else{
+        console.log('result: user not found');
+    }
+    // res.render('dashboard', {res:response.result});
 };
