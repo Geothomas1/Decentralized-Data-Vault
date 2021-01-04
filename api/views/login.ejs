@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <script>
+        function valForm(){
+            console.log("Validating Form");
+            return true;
+        }
+    </script>
+
+    <body>
+        <h3>Login</h3>
+        <form name="loginform" method="POST" action="/login" onsubmit="return valForm()">
+            <select name="orgname" required="required">
+                <option disabled="disabled" selected="selected" value="">Choose Organization</option>
+                <option value="Org1">Organization 1</option>
+                <option value="Org2">Organization 2</option>
+            </select>
+            <input name="username" type="text" placeholder="username">
+            <input name="password" type="password" placeholder="password">
+            <input type="submit" value="submit">
+        </form>
+    </body>
+
+</html>

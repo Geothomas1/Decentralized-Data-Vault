@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    function checkPass() {
+        console.log("Passwords Checking");
+        if (document.getElementsByName("password").value == document.getElementsByName("confirm_password").value) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+    function valForm() {
+        console.log("Validating Form");
+        if(checkPass() == true){
+            console.log("true");
+            return true;
+        } else{
+            console.log("false");
+            return false;
+        }
+    };
+</script>
+
+<body>
+    <h3>Register</h3>
+    <form name="regform" method="POST"  action="/register" onsubmit="return valForm()">
+        <select name="orgname" required="required">
+            <option disabled="disabled" selected="selected" value="">Choose Organization</option>
+            <option value="Org1">Organization 1</option>
+            <option value="Org2">Organization 2</option>
+        </select>
+        <input name="username" type="text" placeholder="username" required="required">
+        <input name="password" type="password" placeholder="password" required="required">
+        <input name="confirm_password" type="password" placeholder="confirm password" required="required">
+        <input type="submit" value="submit">
+    </form>
+</body>
+
+</html>
