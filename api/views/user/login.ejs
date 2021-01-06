@@ -22,34 +22,33 @@
                     <h2>Login to Datavault Network </h2>
                     <br>
                     <br>
+
                     <form name="loginform" method="POST" action="/login" onsubmit="return valForm()">
+                        <%if (loginErr) { %>
 
-                        <div class="row">
-                            <div class="col col-md-6">
-                                <input name="username" type="text" placeholder="Username" class="form-control" required>
+                            <div class="alert alert-danger">
+                                <strong> Incorrect Username or Password</strong>
                             </div>
-                        </div>
-                        <br>
-                        <br>
-                        <div class="row">
-                            <div class="col col-md-6">
-                                <input name="password" type="password" placeholder="Password" class="form-control" required>
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                        <div class="row">
-                            <div class="col col-md-6">
-                                <select name="orgname" required="required" class="form-control">
-                                    <option disabled="disabled" selected="selected" value="" >Choose Organization</option>
-                                   <option value="Org1">Organization 1</option>
-                                   <option value="Org2">Organization 2</option>
-                                   </select>
-                            </div>
-                        </div>
-                        <br>
 
-                        <button type="submit" class="btn btn-primary">Sign up</button>
+                            <% } %>
+
+
+                                <div class="row">
+                                    <div class="col col-md-6">
+                                        <input name="username" type="text" placeholder="Username" class="form-control" required>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <div class="row">
+                                    <div class="col col-md-6">
+                                        <input name="password" type="password" placeholder="Password" class="form-control" required>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+
+                                <button type="submit" class="btn btn-primary">Sign up</button>
 
                     </form>
                 </div>

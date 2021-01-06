@@ -17,7 +17,7 @@ const getCCP = (org) => {
     return ccp;
 };
 
-const getCaUrl = async (org, ccp) => {
+const getCaUrl = async(org, ccp) => {
     let caURL;
     if (org == "Org1") {
         caURL = ccp.certificateAuthorities['ca.org1.example.com'].url;
@@ -28,7 +28,7 @@ const getCaUrl = async (org, ccp) => {
     return caURL;
 }
 
-const getWalletPath = async (org) => {
+const getWalletPath = async(org) => {
     let walletPath;
     if (org == "Org1") {
         walletPath = path.join(process.cwd(), 'org1-wallet');
@@ -40,7 +40,7 @@ const getWalletPath = async (org) => {
     return walletPath;
 }
 
-const getCaInfo = async (org, ccp) => {
+const getCaInfo = async(org, ccp) => {
     let caInfo
     if (org == "Org1") {
         caInfo = ccp.certificateAuthorities['ca.org1.example.com'];
@@ -51,7 +51,7 @@ const getCaInfo = async (org, ccp) => {
     return caInfo;
 }
 
-const enrollAdmin = async (org, ccp) => {
+const enrollAdmin = async(org, ccp) => {
     try {
         const caInfo = await getCaInfo(org, ccp);
         const caTLSCACerts = caInfo.tlsCACerts.pem;
@@ -96,7 +96,7 @@ const enrollAdmin = async (org, ccp) => {
     }
 };
 
-const getAffiliation = async (org) => {
+const getAffiliation = async(org) => {
     return org == 'Org1' ? 'org1.department1' : 'org2.department1'
 }
 
