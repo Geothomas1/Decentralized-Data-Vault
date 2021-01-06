@@ -10,6 +10,7 @@ const path = require('path');
 const log4js = require('log4js');
 const logger = log4js.getLogger('BasicNetwork');
 const session = require('express-session');
+const mongoose = require('mongoose');
 
 const host = "localhost";
 const port = "3000";
@@ -33,6 +34,13 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 
 logger.level = 'debug';
+
+const db = 'mongodb://manuel:manuel@127.0.0.1/ddvault?authSource=admin';
+mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
+const connection = mongoose.connection;
+connection.once('open', () => {
+    logger.info('MongoDB database connection established successfully!');
+});
 
 http.createServer(app).listen(port, () => {
     logger.info(`Server running at http://${host}:${port}`);
