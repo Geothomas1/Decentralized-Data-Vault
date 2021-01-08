@@ -59,8 +59,11 @@ exports.login = async (req, res) => {
                         } else {
                             if (isMatch) {
                                 console.log('<< Login Success >>');
+                                req.session.usr = usr;
+                                console.log('user Usr !!', req.session.usr)
                                 req.session.username = usr.username;
                                 console.log(req.session.username)
+                                req.session.save();
                                 return res.render('user/userHome', { username: req.session.username })
                             } else {
                                 console.log('Password incorrect');
@@ -85,3 +88,7 @@ exports.login = async (req, res) => {
         //return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
     }
 };
+
+exports.addData = async(req, res) => {
+
+}
