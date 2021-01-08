@@ -90,7 +90,7 @@ class User extends Contract {
             docType: 'user',
         };
         await ctx.stub.putState(userNumber, Buffer.from(JSON.stringify(user)));
-        console.info('============= END : Create User ===========');
+        console.info('============= END : Create User Success ===========');
     }
 
     async queryUserById(ctx, userName) {

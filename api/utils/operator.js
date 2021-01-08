@@ -3,7 +3,7 @@ const FabricCAServices = require('fabric-ca-client');
 const { Gateway, Wallets } = require('fabric-network');
 const helper = require('./helper');
 
-const queryUserById = async (userorg, username, userid) => {
+const queryUserById = async(userorg, username, userid) => {
     let ccp = await helper.getCCP(userorg);
     const caURL = await helper.getCaUrl(userorg, ccp);
     const ca = new FabricCAServices(caURL);
@@ -16,7 +16,9 @@ const queryUserById = async (userorg, username, userid) => {
         console.log(`An identity for the user ${username} exists in the wallet`);
         try {
             const connectOptions = {
-                wallet, identity: username, discovery: { enabled: true, asLocalhost: true },
+                wallet,
+                identity: username,
+                discovery: { enabled: true, asLocalhost: true },
             };
             const gateway = new Gateway();
             await gateway.connect(ccp, connectOptions);
@@ -41,7 +43,7 @@ const queryUserById = async (userorg, username, userid) => {
     }
 };
 
-const enrollUser = async (orgname, username) => {
+const enrollUser = async(orgname, username) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
     const ca = new FabricCAServices(caURL);
@@ -116,6 +118,8 @@ const enrollUser = async (orgname, username) => {
         }
     }
 };
+
+
 
 module.exports = {
     // queryUserById: queryUserById,

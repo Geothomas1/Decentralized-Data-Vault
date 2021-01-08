@@ -18,5 +18,5 @@ router.get('/logout', (req, res) => {
 router.get('/addData', (req, res) => {
     res.render('user/addData', { username: req.session.username })
 })
-router.post('addData', user.addData)
+router.post('/addData', user.addData)
 module.exports = router;

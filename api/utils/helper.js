@@ -100,6 +100,19 @@ const getAffiliation = async(org) => {
     return org == 'Org1' ? 'org1.department1' : 'org2.department1'
 }
 
+const isUserRegistered = async(username, userOrg) => {
+    const walletPath = await getWalletPath(userOrg)
+    const wallet = await Wallets.newFileSystemWallet(walletPath);
+    console.log(`Wallet path: ${walletPath}`);
+
+    const userIdentity = await wallet.get(username);
+    if (userIdentity) {
+        console.log(`An identity for the user ${username} exists in the wallet`);
+        return true
+    }
+    return false
+}
+
 module.exports = {
     getCCP: getCCP,
     getCaUrl: getCaUrl,
@@ -107,4 +120,5 @@ module.exports = {
     getCaInfo: getCaInfo,
     enrollAdmin: enrollAdmin,
     getAffiliation: getAffiliation,
+    isUserRegistered: isUserRegistered,
 }
