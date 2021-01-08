@@ -12,56 +12,55 @@ class User extends Contract {
 
     async initLedger(ctx) {
         console.info('============= START : Initialize Ledger ===========');
-        const users = [
-            {
-                username: 'blue',
-                password: 'Toyota',
-                orgname: 'Org1',
+        const users = [{
+                username: 'User0',
+                email: 'testd0@gmail.com',
+                phone: '9999999990',
             },
             {
-                username: 'red',
-                password: 'Ford',
-                orgname: 'Org2',
+                username: 'User1',
+                email: 'testd1@gmail.com',
+                phone: '9999999991',
             },
             {
-                username: 'green',
-                password: 'Hyundai',
-                orgname: 'Org1',
+                username: 'User2',
+                email: 'testd2@gmail.com',
+                phone: '9999999992',
             },
             {
-                username: 'yellow',
-                password: 'Volkswagen',
-                orgname: 'Org2',
+                username: 'User3',
+                email: 'testd3@gmail.com',
+                phone: '9999999993',
             },
             {
-                username: 'black',
-                password: 'Tesla',
-                orgname: 'Org1',
+                username: 'User4',
+                email: 'testd4@gmail.com',
+                phone: '9999999994',
             },
             {
-                username: 'purple',
-                password: 'Peugeot',
-                orgname: 'Org2',
+                username: 'User5',
+                email: 'testd5@gmail.com',
+                phone: '9999999995',
             },
             {
-                username: 'white',
-                password: 'Chery',
-                orgname: 'Org1',
+                username: 'User6',
+                email: 'testd6@gmail.com',
+                phone: '9999999996',
             },
             {
-                username: 'violet',
-                password: 'Fiat',
-                orgname: 'Org2',
+                username: 'User7',
+                email: 'testd7@gmail.com',
+                phone: '9999999997',
             },
             {
-                username: 'indigo',
-                password: 'Tata',
-                orgname: 'Org1',
+                username: 'User8',
+                email: 'testd8@gmail.com',
+                phone: '9999999998',
             },
             {
-                username: 'brown',
-                password: 'Holden',
-                orgname: 'Org2',
+                username: 'User9',
+                email: 'testd9@gmail.com',
+                phone: '9999999999',
             },
         ];
 
@@ -82,12 +81,12 @@ class User extends Contract {
         return userAsBytes.toString();
     }
 
-    async createUser(ctx, userNumber, username, password, orgname) {
+    async createUser(ctx, userNumber, username, email, phone) {
         console.info('============= START : Create User ===========');
         const user = {
             username,
-            password,
-            orgname,
+            email,
+            phone,
             docType: 'user',
         };
         await ctx.stub.putState(userNumber, Buffer.from(JSON.stringify(user)));

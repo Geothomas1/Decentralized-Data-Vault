@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(session({
     secret: 'decentralized data vault',
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     cookie: { secure: true }
 }))
