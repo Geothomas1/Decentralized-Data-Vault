@@ -118,11 +118,7 @@ const enrollUser = async(orgname, username) => {
         }
     }
 };
-
-<<<<<<< HEAD
-
-=======
-const createAsset = async (orgname, username, channel, chaincode, fcn, args) => {
+const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
     const ca = new FabricCAServices(caURL);
@@ -133,22 +129,24 @@ const createAsset = async (orgname, username, channel, chaincode, fcn, args) => 
     const userIdentity = await wallet.get(username);
     if (userIdentity) {
         const connectOptions = {
-            wallet, identity: username, discovery: { enabled: true, asLocalhost: true },
+            wallet,
+            identity: username,
+            discovery: { enabled: true, asLocalhost: true },
         };
         try {
             const gateway = new Gateway();
             await gateway.connect(ccp, connectOptions);
-            if (channel == 'channelName1') {
-                const network = await gateway.getNetwork('channelName1');
-                if (chaincode == 'chaincodeName1') {
-                    const contract = network.getContract('chaincodeName1');
+            if (channel == 'mychannel') {
+                const network = await gateway.getNetwork(channel);
+                if (chaincode == 'user') {
+                    const contract = network.getContract(chaincode);
                     switch (fcn) {
-                        case 'fcn1':
-                            let result = await contract.submitTransaction('fcn1', args[0], args[1], args[2], args[3]);
+                        case fcn:
+                            let result = await contract.submitTransaction(fcn, args[0], args[0], args[1], args[2]);
                             await gateway.disconnect();
                             return {
                                 status: 1,
-                                msg: `Asset added successfully, channel : channelName1, chaincode : chaincodeName1, fcn : fcn1`,
+                                msg: `Asset added successfully`,
                                 value: result
                             };
                         default:
@@ -189,7 +187,7 @@ const createAsset = async (orgname, username, channel, chaincode, fcn, args) => 
     }
 
 };
->>>>>>> refs/remotes/origin/main
+
 
 module.exports = {
     // queryUserById: queryUserById,

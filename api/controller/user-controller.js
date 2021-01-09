@@ -4,7 +4,7 @@ const operator = require('../utils/operator');
 const User = require('../models/user-schema');
 
 
-exports.register = async (req, res) => {
+exports.register = async(req, res) => {
     console.log('In register', req.body);
     if (req.body.orgname && req.body.username && req.body.password) {
         let result = await operator.enrollUser(req.body.orgname, req.body.username);
@@ -37,7 +37,7 @@ exports.register = async (req, res) => {
     }
 };
 
-exports.login = async (req, res) => {
+exports.login = async(req, res) => {
     //req.session.loginErr = false;
     console.log('In login', req.body);
 
@@ -69,7 +69,7 @@ exports.login = async (req, res) => {
                                 console.log('Password incorrect');
                                 req.session.loginErr = true
                                 return res.render('user/login', { status: 0, loginErr: req.session.loginErr })
-                                //return res.status(500).json({ status: 0, msg: 'Password incorrect' });
+                                    //return res.status(500).json({ status: 0, msg: 'Password incorrect' });
                             }
                         }
                     });
@@ -77,7 +77,7 @@ exports.login = async (req, res) => {
                     console.log(req.username + ' doesnot exists');
                     req.session.loginErr = true
                     return res.render('user/login', { status: 0, loginErr: req.session.loginErr })
-                    //return res.status(404).json({ status: 0, msg: req.username + ' doesnot exists' });
+                        //return res.status(404).json({ status: 0, msg: req.username + ' doesnot exists' });
                 }
             }
         });
@@ -85,11 +85,23 @@ exports.login = async (req, res) => {
         console.log('Invalid format');
         req.session.loginErr = true
         return res.render('user/login', { status: 0, loginErr: req.session.loginErr })
-        //return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
+            //return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
     }
 };
 
 exports.addData = async(req, res) => {
 
+    console.log(req.body)
+    var orgname = req.body.orgName;
+    var username = req.body.username;
+    var channel = req.body.channelName;
+    var chaincode = req.body.chaincodeName;
+    var fcn = req.body.fcn;
+    var phone = req.body.phone;
+    var email = req.body.email;
+    var args = [username, email, phone]
+    let result = await operator.createAsset(orgname, username, channel, chaincode, fcn, args)
+    console.log(result)
 
-}
+
+};
