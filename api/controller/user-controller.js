@@ -4,7 +4,7 @@ const operator = require('../utils/operator');
 const User = require('../models/user-schema');
 
 
-exports.register = async (req, res) => {
+exports.register = async(req, res) => {
     console.log('In register', req.body);
     if (req.body.orgname && req.body.username && req.body.password) {
         let result = await operator.enrollUser(req.body.orgname, req.body.username);
@@ -37,7 +37,7 @@ exports.register = async (req, res) => {
     }
 };
 
-exports.login = async (req, res) => {
+exports.login = async(req, res) => {
     console.log('In login', req.body);
     if (req.body.username && req.body.password) {
         User.findOne({ username: req.body.username }, (err, usr) => {
@@ -55,14 +55,14 @@ exports.login = async (req, res) => {
                         } else {
                             if (isMatch) {
                                 console.log('<< Login Success >>');
-                                req.session.user = usr.username;
+                                req.session.username = usr.username;
                                 console.log('session !!', req.session);
-                                // return res.render('user/userHome', { username: req.session.user.username })
+
                                 req.session.save(err => {
                                     if (err) {
                                         console.log(err);
                                     } else {
-                                        res.redirect('/user/home');
+                                        return res.render('user/userHome', { username: req.session.username })
                                     }
                                 });
                             } else {
@@ -86,7 +86,7 @@ exports.login = async (req, res) => {
     }
 };
 
-exports.addData = async (req, res) => {
+exports.addData = async(req, res) => {
 
     console.log(req.body)
     var orgname = req.body.orgName;
@@ -98,7 +98,19 @@ exports.addData = async (req, res) => {
     var email = req.body.email;
     var args = [username, email, phone]
     let result = await operator.createAsset(orgname, username, channel, chaincode, fcn, args)
-    res.render('user/userHome')
-
+    res.render('user/userHome', { username: req.session.username })
 
 };
+
+exports.viewData = async(req, res) => {
+    console.log(req.session.username);
+    var userorg = req.query.orgName;
+    var username = req.session.username;
+    var channel = req.query.channelName;
+    var chaincode = req.query.chaincodeName;
+    var fcn = req.query.fcn;
+    let result = await operator.queryUserById(userorg, username, channel, chaincode, fcn)
+
+    res.render('user/viewData', { username: req.session.username, email: result.result.email, phone: result.result.phone })
+
+}

@@ -3,7 +3,7 @@ const FabricCAServices = require('fabric-ca-client');
 const { Gateway, Wallets } = require('fabric-network');
 const helper = require('./helper');
 
-const queryUserById = async(userorg, username, userid) => {
+const queryUserById = async(userorg, username, channel, chaincode, fcn) => {
     let ccp = await helper.getCCP(userorg);
     const caURL = await helper.getCaUrl(userorg, ccp);
     const ca = new FabricCAServices(caURL);
@@ -22,9 +22,9 @@ const queryUserById = async(userorg, username, userid) => {
             };
             const gateway = new Gateway();
             await gateway.connect(ccp, connectOptions);
-            const network = await gateway.getNetwork('mychannel');
-            const contract = network.getContract('user');
-            let result = await contract.evaluateTransaction('queryUserById', userid);
+            const network = await gateway.getNetwork(channel);
+            const contract = network.getContract(chaincode);
+            let result = await contract.evaluateTransaction(fcn, username);
             await gateway.disconnect();
             return {
                 result: JSON.parse(Buffer.from(result).toString('utf8')),
@@ -194,4 +194,5 @@ module.exports = {
     // queryUserById: queryUserById,
     enrollUser: enrollUser,
     createAsset: createAsset,
+    queryUserById: queryUserById,
 };

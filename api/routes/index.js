@@ -20,4 +20,10 @@ router.get('/addData', (req, res) => {
 });
 router.post('/addData', user.addData);
 
+router.get('/getData', (req, res) => {
+    res.render('user/getData', { username: req.session.username })
+});
+
+router.get('/viewData', user.viewData);
+
 module.exports = router;

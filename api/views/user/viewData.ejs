@@ -26,21 +26,21 @@
                     <form name="addDataform" method="POST" action="/addData" onsubmit="return valForm()">
                         <div class="row">
                             <div class="col col-md-6">
-                                <input name="username" type="text" value="<%= username %>" placeholder="Username" class="form-control" required readonly>
+                                <input name="username" type="text" value="<%= username %>" class="form-control" required readonly>
                             </div>
                         </div>
                         <br>
                         <br>
                         <div class="row">
                             <div class="col col-md-6">
-                                <input name="phone" type="phone" placeholder="Phone" class="form-control" required>
+                                <input name="phone" type="phone" value="<%= phone %>" class=" form-control " required>
                             </div>
                         </div>
                         <br>
                         <br>
-                        <div class="row">
-                            <div class="col col-md-6">
-                                <input name="email" type="email" placeholder="Email" class="form-control" required>
+                        <div class="row ">
+                            <div class="col col-md-6 ">
+                                <input name="email " type="email" value="<%= email %>" class="form-control" required>
                             </div>
                         </div>
                         <br>
@@ -51,8 +51,7 @@
                         <input type="hidden" name="peer0" id="peer0" value="peer0.org1.example.com">
                         <input type="hidden" name="peer1" id="peer1" value="peer0.org2.example.com">
                         <input type="hidden" name="orgName" id="orgName" value="Org1">
-
-                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
 
                     </form>
                 </div>

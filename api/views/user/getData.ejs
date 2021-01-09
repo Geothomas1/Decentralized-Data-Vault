@@ -19,40 +19,25 @@
         <div class="row">
             <div class="col-md-6 m-auto">
                 <div class="container mt-5 pl-5">
-                    <h2>Add Data to Datavault Network </h2>
+                    <h2>View Data </h2>
                     <br>
                     <br>
 
-                    <form name="addDataform" method="POST" action="/addData" onsubmit="return valForm()">
+                    <form name="addDataform" method="GET" action="/viewData" onsubmit="return valForm()">
                         <div class="row">
                             <div class="col col-md-6">
                                 <input name="username" type="text" value="<%= username %>" placeholder="Username" class="form-control" required readonly>
                             </div>
                         </div>
-                        <br>
-                        <br>
-                        <div class="row">
-                            <div class="col col-md-6">
-                                <input name="phone" type="phone" placeholder="Phone" class="form-control" required>
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                        <div class="row">
-                            <div class="col col-md-6">
-                                <input name="email" type="email" placeholder="Email" class="form-control" required>
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                        <input type="hidden" name="fcn" id="fcn" value="createUser">
+                        <input type="hidden" name="orgName" id="orgName" value="Org1">
+                        <input type="hidden" name="fcn" id="fcn" value="queryUserById">
                         <input type="hidden" name="chaincodeName" id="chaincodeName" value="user">
                         <input type="hidden" name="channelName" id="channelName" value="mychannel">
-                        <input type="hidden" name="peer0" id="peer0" value="peer0.org1.example.com">
-                        <input type="hidden" name="peer1" id="peer1" value="peer0.org2.example.com">
-                        <input type="hidden" name="orgName" id="orgName" value="Org1">
 
-                        <button type="submit" class="btn btn-primary">Add</button>
+                        <br>
+                        <br>
+
+                        <button type="submit" class="btn btn-primary">View</button>
 
                     </form>
                 </div>
