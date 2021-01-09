@@ -101,7 +101,7 @@ exports.addData = async(req, res) => {
     var email = req.body.email;
     var args = [username, email, phone]
     let result = await operator.createAsset(orgname, username, channel, chaincode, fcn, args)
-    console.log(result)
+    res.render('user/userHome')
 
 
 };

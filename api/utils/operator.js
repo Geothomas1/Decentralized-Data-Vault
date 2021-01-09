@@ -126,6 +126,7 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
     const wallet = await Wallets.newFileSystemWallet(walletPath);
     console.log(`Wallet path: ${walletPath}`);
 
+
     const userIdentity = await wallet.get(username);
     if (userIdentity) {
         const connectOptions = {
