@@ -11,12 +11,13 @@ router.get('/login', (req, res) => {
 router.post('/register', user.register);
 router.post('/login', user.login);
 router.get('/logout', (req, res) => {
-    req.session.destroy()
-    res.redirect('/login')
-})
+    req.session.destroy();
+    res.redirect('/login');
+});
 
 router.get('/addData', (req, res) => {
-    res.render('user/addData', { username: req.session.username })
-})
-router.post('/addData', user.addData)
+    res.render('user/addData', { username: req.session.username });
+});
+router.post('/addData', user.addData);
+
 module.exports = router;

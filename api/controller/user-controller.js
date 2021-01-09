@@ -4,7 +4,7 @@ const operator = require('../utils/operator');
 const User = require('../models/user-schema');
 
 
-exports.register = async(req, res) => {
+exports.register = async (req, res) => {
     console.log('In register', req.body);
     if (req.body.orgname && req.body.username && req.body.password) {
         let result = await operator.enrollUser(req.body.orgname, req.body.username);
@@ -37,10 +37,8 @@ exports.register = async(req, res) => {
     }
 };
 
-exports.login = async(req, res) => {
-    //req.session.loginErr = false;
+exports.login = async (req, res) => {
     console.log('In login', req.body);
-
     if (req.body.username && req.body.password) {
         User.findOne({ username: req.body.username }, (err, usr) => {
             if (err) {
@@ -53,31 +51,31 @@ exports.login = async(req, res) => {
                         if (err) {
                             console.log('Something went wrong');
                             req.session.loginErr = true;
-
-                            //return res.status(500).json({ status: 0, msg: 'Something went wrong' });
                             return res.render('user/login', { status: 0, loginErr: req.session.loginErr });
                         } else {
                             if (isMatch) {
                                 console.log('<< Login Success >>');
-                                req.session.usr = usr;
-                                console.log('user Usr !!', req.session.usr)
-                                req.session.username = usr.username;
-                                console.log(req.session.username)
-                                req.session.save();
-                                return res.render('user/userHome', { username: req.session.username })
+                                req.session.user = usr.username;
+                                console.log('session !!', req.session);
+                                // return res.render('user/userHome', { username: req.session.user.username })
+                                req.session.save(err => {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        res.redirect('/user/home');
+                                    }
+                                });
                             } else {
                                 console.log('Password incorrect');
                                 req.session.loginErr = true
-                                return res.render('user/login', { status: 0, loginErr: req.session.loginErr })
-                                    //return res.status(500).json({ status: 0, msg: 'Password incorrect' });
+                                return res.render('user/login', { status: 0, loginErr: req.session.loginErr });
                             }
                         }
                     });
                 } else {
                     console.log(req.username + ' doesnot exists');
-                    req.session.loginErr = true
-                    return res.render('user/login', { status: 0, loginErr: req.session.loginErr })
-                        //return res.status(404).json({ status: 0, msg: req.username + ' doesnot exists' });
+                    req.session.loginErr = true;
+                    return res.render('user/login', { status: 0, loginErr: req.session.loginErr });
                 }
             }
         });
@@ -85,11 +83,10 @@ exports.login = async(req, res) => {
         console.log('Invalid format');
         req.session.loginErr = true
         return res.render('user/login', { status: 0, loginErr: req.session.loginErr })
-            //return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
     }
 };
 
-exports.addData = async(req, res) => {
+exports.addData = async (req, res) => {
 
     console.log(req.body)
     var orgname = req.body.orgName;

@@ -25,7 +25,7 @@ app.use(session({
     secret: 'decentralized data vault',
     resave: true,
     saveUninitialized: true,
-    cookie: { secure: true }
+    cookie: { secure: false }
 }))
 
 app.set('views', path.join(__dirname, 'views'));
@@ -35,8 +35,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 logger.level = 'debug';
 
-//const db = 'mongodb://manuel:manuel@127.0.0.1/ddvault?authSource=admin';
-const db = 'mongodb://myUserAdmin:pwd@127.0.0.1/ddvault?authSource=admin';
+const db = 'mongodb://manuel:manuel@127.0.0.1/ddvault?authSource=admin';
+// const db = 'mongodb://myUserAdmin:pwd@127.0.0.1/ddvault?authSource=admin';
 mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.once('open', () => {
@@ -48,7 +48,6 @@ http.createServer(app).listen(port, () => {
 });
 
 const indexRouter = require('./routes/index');
+const userRouter = require('./routes/user');
 app.use('/', indexRouter);
-app.use('/test', (req, res) => {
-    console.log("test", req.session);
-});
+app.use('/user', userRouter);
