@@ -109,7 +109,7 @@ exports.viewData = async(req, res) => {
     var channel = req.query.channelName;
     var chaincode = req.query.chaincodeName;
     var fcn = req.query.fcn;
-    let result = await operator.queryUserById(userorg, username, channel, chaincode, fcn)
+    let result = await operator.queryAsset(userorg, username, channel, chaincode, fcn, [username])
 
     res.render('user/viewData', { username: req.session.username, email: result.result.email, phone: result.result.phone })
 

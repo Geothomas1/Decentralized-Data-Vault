@@ -3,46 +3,6 @@ const FabricCAServices = require('fabric-ca-client');
 const { Gateway, Wallets } = require('fabric-network');
 const helper = require('./helper');
 
-const queryUserById = async(userorg, username, channel, chaincode, fcn) => {
-    let ccp = await helper.getCCP(userorg);
-    const caURL = await helper.getCaUrl(userorg, ccp);
-    const ca = new FabricCAServices(caURL);
-    const walletPath = await helper.getWalletPath(userorg);
-    const wallet = await Wallets.newFileSystemWallet(walletPath);
-    console.log(`Wallet path: ${walletPath}`);
-
-    const userIdentity = await wallet.get(username);
-    if (userIdentity) {
-        console.log(`An identity for the user ${username} exists in the wallet`);
-        try {
-            const connectOptions = {
-                wallet,
-                identity: username,
-                discovery: { enabled: true, asLocalhost: true },
-            };
-            const gateway = new Gateway();
-            await gateway.connect(ccp, connectOptions);
-            const network = await gateway.getNetwork(channel);
-            const contract = network.getContract(chaincode);
-            let result = await contract.evaluateTransaction(fcn, username);
-            await gateway.disconnect();
-            return {
-                result: JSON.parse(Buffer.from(result).toString('utf8')),
-                status: 200,
-            };
-        } catch (error) {
-            console.log(`Getting error: ${error}`);
-            return error.message;
-        }
-    } else {
-        console.log(`No identity for the user ${username} exists in the wallet`);
-        return {
-            message: username + ' doesnot exists',
-            status: 209,
-        };
-    }
-};
-
 const enrollUser = async(orgname, username) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
@@ -118,6 +78,7 @@ const enrollUser = async(orgname, username) => {
         }
     }
 };
+
 const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
@@ -125,7 +86,6 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
     const walletPath = await helper.getWalletPath(orgname);
     const wallet = await Wallets.newFileSystemWallet(walletPath);
     console.log(`Wallet path: ${walletPath}`);
-
 
     const userIdentity = await wallet.get(username);
     if (userIdentity) {
@@ -137,41 +97,15 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
         try {
             const gateway = new Gateway();
             await gateway.connect(ccp, connectOptions);
-            if (channel == 'mychannel') {
-                const network = await gateway.getNetwork(channel);
-                if (chaincode == 'user') {
-                    const contract = network.getContract(chaincode);
-                    switch (fcn) {
-                        case fcn:
-                            let result = await contract.submitTransaction(fcn, args[0], args[0], args[1], args[2]);
-                            await gateway.disconnect();
-                            return {
-                                status: 1,
-                                msg: `Asset added successfully`,
-                                value: result
-                            };
-                        default:
-                            return {
-                                status: 0,
-                                msg: `Fcn not found, channel : channelName1, chaincode : chaincodeName1, fcn : ${fcn}`,
-                            };
-                    }
-                } else if (chaincode == 'chaincodeName2') {
-                    //code for next chaincode
-                } else {
-                    return {
-                        status: 0,
-                        msg: `Chaincode not found, channel : channelName1, chaincode : ${chaincode}`,
-                    };
-                }
-            } else if (channel == 'channelName2') {
-                //code for next channel
-            } else {
-                return {
-                    status: 0,
-                    msg: `Channel not found, channel : ${channel}`,
-                };
-            }
+            const network = await gateway.getNetwork(channel);
+            const contract = network.getContract(chaincode);
+            let result = await contract.submitTransaction(fcn, args[0], args[0], args[1], args[2]);
+            await gateway.disconnect();
+            return {
+                status: 1,
+                msg: `Asset added successfully`,
+                value: result
+            };
         } catch (error) {
             console.log(`Getting error: ${error}`);
             return {
@@ -180,13 +114,55 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
             };
         }
     } else {
-        console.log(`Identity for the user ${username} doesn't exists in the wallet`);
+        console.log(`No identity for the user ${username} exists in the wallet`);
         return {
             status: 0,
             msg: username + ' not enrolled',
         };
     }
+};
 
+const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
+    let ccp = await helper.getCCP(userorg);
+    const caURL = await helper.getCaUrl(userorg, ccp);
+    const ca = new FabricCAServices(caURL);
+    const walletPath = await helper.getWalletPath(userorg);
+    const wallet = await Wallets.newFileSystemWallet(walletPath);
+    console.log(`Wallet path: ${walletPath}`);
+
+    const userIdentity = await wallet.get(username);
+    if (userIdentity) {
+        console.log(`An identity for the user ${username} exists in the wallet`);
+        try {
+            const connectOptions = {
+                wallet,
+                identity: username,
+                discovery: { enabled: true, asLocalhost: true },
+            };
+            const gateway = new Gateway();
+            await gateway.connect(ccp, connectOptions);
+            const network = await gateway.getNetwork(channel);
+            const contract = network.getContract(chaincode);
+            let result = await contract.evaluateTransaction(fcn, args[0]);
+            await gateway.disconnect();
+            return {
+                result: JSON.parse(Buffer.from(result).toString('utf8')),
+                status: 200,
+            };
+        } catch (error) {
+            console.log(`Getting error: ${error}`);
+            return {
+                status: -1,
+                msg: error.message
+            };
+        }
+    } else {
+        console.log(`No identity for the user ${username} exists in the wallet`);
+        return {
+            status: 0,
+            msg: username + ' not enrolled',
+        };
+    }
 };
 
 const getHistory = async(userorg, username, channel, chaincode, fcn) => {
@@ -231,9 +207,8 @@ const getHistory = async(userorg, username, channel, chaincode, fcn) => {
 
 
 module.exports = {
-    // queryUserById: queryUserById,
     enrollUser: enrollUser,
     createAsset: createAsset,
-    queryUserById: queryUserById,
+    queryAsset: queryAsset,
     getHistory: getHistory,
 };
