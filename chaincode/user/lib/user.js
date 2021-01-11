@@ -94,13 +94,34 @@ class User extends Contract {
     }
 
     async queryUserById(ctx, userName) {
-        console.info('============= START : queryUserById ===========');
-        const userAsBytes = await ctx.stub.getState(userName);
-        if (!userAsBytes || userAsBytes.length === 0) {
-            return;
+            console.info('============= START : queryUserById ===========');
+            const userAsBytes = await ctx.stub.getState(userName);
+            if (!userAsBytes || userAsBytes.length === 0) {
+                return;
+            }
+            return userAsBytes.toString();
         }
-        return userAsBytes.toString();
+        //get data history
+
+    async retrieveHistory(ctx, userName) {
+        console.info('getting history for key: ' + userName);
+        let iterator = await ctx.stub.getHistoryForKey(userName);
+        let result = [];
+        let res = await iterator.next();
+        while (!res.done) {
+            if (res.value) {
+                console.info(`found state update with value: ${res.value.value.toString('utf8')}`);
+                const obj = JSON.parse(res.value.value.toString('utf8'));
+                result.push(obj);
+            }
+            res = await iterator.next();
+        }
+        await iterator.close();
+        return result;
     }
+
 }
+
+
 
 module.exports = User;

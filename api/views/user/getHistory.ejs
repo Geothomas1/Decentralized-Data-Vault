@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Data Vault</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/javascripts/script.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+</head>
+<header>
+    <%- include('../partials/user-Homeheader'); %>
+</header>
+
+<body>
+
+    <section>
+        <div class="row">
+            <div class="col-md-6 m-auto">
+                <div class="container mt-5 pl-5">
+                    <h2>Get History </h2>
+                    <br>
+                    <br>
+
+                    <form name="addDataform" method="GET" action="/viewHistory" onsubmit="return valForm()">
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <input name="username" type="text" value="<%= username %>" placeholder="Username" class="form-control" required readonly>
+                            </div>
+                        </div>
+                        <input type="hidden" name="orgName" id="orgName" value="Org1">
+                        <input type="hidden" name="fcn" id="fcn" value="retrieveHistory">
+                        <input type="hidden" name="chaincodeName" id="chaincodeName" value="user">
+                        <input type="hidden" name="channelName" id="channelName" value="mychannel">
+
+                        <br>
+                        <br>
+
+                        <button type="submit" class="btn btn-primary">View</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>
+
+<script>
+    function valForm() {
+        console.log("Validating Form");
+        return true;
+    }
+</script>

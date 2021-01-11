@@ -26,4 +26,9 @@ router.get('/getData', (req, res) => {
 
 router.get('/viewData', user.viewData);
 
+router.get('/getHistory', (req, res) => {
+    res.render('user/getHistory', { username: req.session.username })
+})
+router.get('/viewHistory', user.viewHistory);
+
 module.exports = router;

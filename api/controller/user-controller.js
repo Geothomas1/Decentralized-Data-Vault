@@ -114,3 +114,16 @@ exports.viewData = async(req, res) => {
     res.render('user/viewData', { username: req.session.username, email: result.result.email, phone: result.result.phone })
 
 }
+exports.viewHistory = async(req, res) => {
+
+    console.log(req.session.username);
+    var userorg = req.query.orgName;
+    var username = req.session.username;
+    var channel = req.query.channelName;
+    var chaincode = req.query.chaincodeName;
+    var fcn = req.query.fcn;
+    let result = await operator.getHistory(userorg, username, channel, chaincode, fcn)
+    console.log(result)
+
+
+}
