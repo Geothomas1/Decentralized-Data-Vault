@@ -3,7 +3,7 @@ const operator = require('../utils/operator');
 
 const Instn = require('../models/instn-schema');
 
-exports.register = async (req, res) => {
+exports.register = async(req, res) => {
     console.log('In institution register', req.body);
     if (req.body.orgname && req.body.username && req.body.password) {
         let result = await operator.enrollUser(req.body.orgname, req.body.username);
@@ -36,7 +36,7 @@ exports.register = async (req, res) => {
     }
 };
 
-exports.login = async (req, res) => {
+exports.login = async(req, res) => {
     console.log('In institution login', req.body);
     if (req.body.username && req.body.password) {
         Instn.findOne({ username: req.body.username }, (err, inst) => {
@@ -55,13 +55,13 @@ exports.login = async (req, res) => {
                             if (isMatch) {
                                 console.log('<< Login Success >>');
                                 req.session.username = inst.username;
-                                console.log('session !!', req.session);
+                                console.log('session !!', req.session.username);
 
                                 req.session.save(err => {
                                     if (err) {
                                         console.log(err);
                                     } else {
-                                        // res.redirect('/instn/home');
+                                        res.redirect('/instn/home');
                                     }
                                 });
                             } else {
