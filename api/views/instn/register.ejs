@@ -7,10 +7,9 @@
     <script src="/javascripts/script.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
 </head>
 <header>
-    <%- include('../partials/user-header'); %>
+    <%- include('../partials/header'); %>
 </header>
 
 <body>
@@ -24,21 +23,18 @@
                         <img class="card-img-top" src="/images/institution.png" alt="" style="width:100px;height:100px;">
                     </div>
                     <br>
-                    <form name="regform" method="POST" action="/iregister" onsubmit="return valForm()">
+                    <form name="regform" method="POST" action="/instn/register" onsubmit="return valForm()">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="Username">Username</label>
                                 <input name="username" type="text" placeholder="username" required="required" class="form-control">
-
                             </div>
                             <input type="hidden" name="orgname" id="orgname" value="Org2">
-
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="Password">Password</label>
                                 <input name="password" type="password" placeholder="password" required="required" class="form-control">
-
                             </div>
                         </div>
                         <div class="form-row">
@@ -50,14 +46,11 @@
                         <div class="form-group">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="gridCheck">
-                                <label class="form-check-label" for="gridCheck">
-                              Check me out
-                            </label>
+                                <label class="form-check-label" for="gridCheck">Check me out</label>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Sign Up</button>
                     </form>
-
                 </div>
             </div>
         </div>
