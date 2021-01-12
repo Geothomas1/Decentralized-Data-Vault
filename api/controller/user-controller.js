@@ -4,7 +4,7 @@ const operator = require('../utils/operator');
 const User = require('../models/user-schema');
 
 
-exports.register = async (req, res) => {
+exports.register = async(req, res) => {
     console.log('In user register', req.body);
     if (req.body.orgname && req.body.username && req.body.password) {
         let result = await operator.enrollUser(req.body.orgname, req.body.username);
@@ -37,7 +37,7 @@ exports.register = async (req, res) => {
     }
 };
 
-exports.login = async (req, res) => {
+exports.login = async(req, res) => {
     console.log('In user login', req.body);
     if (req.body.username && req.body.password) {
         User.findOne({ username: req.body.username }, (err, usr) => {
@@ -86,7 +86,7 @@ exports.login = async (req, res) => {
     }
 };
 
-exports.addData = async (req, res) => {
+exports.addData = async(req, res) => {
 
     console.log(req.body)
     var orgname = req.body.orgName;
@@ -98,23 +98,25 @@ exports.addData = async (req, res) => {
     var email = req.body.email;
     var args = [username, email, phone]
     let result = await operator.createAsset(orgname, username, channel, chaincode, fcn, args)
-    res.render('user/userHome', { username: req.session.username })
+    res.render('user/home', { username: req.session.username })
 
 };
 
-exports.viewData = async (req, res) => {
+exports.viewData = async(req, res) => {
     console.log(req.session.username);
     var userorg = req.query.orgName;
     var username = req.session.username;
     var channel = req.query.channelName;
     var chaincode = req.query.chaincodeName;
     var fcn = req.query.fcn;
-    let result = await operator.queryAsset(userorg, username, channel, chaincode, fcn, [username])
+    var args = [username];
+    let result = await operator.queryAsset(userorg, username, channel, chaincode, fcn, args)
+    console.log(result)
 
     res.render('user/viewData', { username: req.session.username, email: result.result.email, phone: result.result.phone })
 
 }
-exports.viewHistory = async (req, res) => {
+exports.viewHistory = async(req, res) => {
 
     console.log(req.session.username);
     var userorg = req.query.orgName;

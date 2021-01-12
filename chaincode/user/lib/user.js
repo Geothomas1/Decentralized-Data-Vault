@@ -105,19 +105,34 @@ class User extends Contract {
 
     async retrieveHistory(ctx, userName) {
         console.info('getting history for key: ' + userName);
-        let iterator = await ctx.stub.getHistoryForKey(userName);
-        let result = [];
-        let res = await iterator.next();
-        while (!res.done) {
-            if (res.value) {
-                console.info(`found state update with value: ${res.value.value.toString('utf8')}`);
-                const obj = JSON.parse(res.value.value.toString('utf8'));
-                result.push(obj);
+        // let iterator = await ctx.stub.getHistoryForKey(userName);
+        // let result = [];
+        // let res = await iterator.next();
+        // while (!res.done) {
+        //     if (res.value) {
+        //         console.info(`found state update with value: ${res.value.value.toString('utf8')}`);
+        //         const obj = JSON.parse(res.value.value.toString('utf8'));
+        //         result.push(obj);
+        //     }
+        //     res = await iterator.next();
+        // }
+        // await iterator.close();
+        // return result;
+        const promiseOfIterator = ctx.stub.getHistoryForKey(userName);
+        const results = [];
+        for await (const keyMod of promiseOfIterator) {
+            const resp = {
+                timestamp: keyMod.timestamp,
+                txid: keyMod.tx_id
             }
-            res = await iterator.next();
+            if (keyMod.is_delete) {
+                resp.data = 'KEY DELETED';
+            } else {
+                resp.data = keyMod.value.toString('utf8');
+            }
+            results.push(resp);
         }
-        await iterator.close();
-        return result;
+        return results;
     }
 
 }
