@@ -18,20 +18,5 @@ router.get('/', (req, res) => res.render('index'));
 //     res.redirect('/login');
 // });
 
-// router.get('/addData', (req, res) => {
-//     res.render('user/addData', { username: req.session.username });
-// });
-// router.post('/addData', user.addData);
-
-// router.get('/getData', (req, res) => {
-//     res.render('user/getData', { username: req.session.username })
-// });
-
-// router.get('/viewData', user.viewData);
-
-// router.get('/getHistory', (req, res) => {
-//     res.render('user/getHistory', { username: req.session.username })
-// })
-// router.get('/viewHistory', user.viewHistory);
 
 module.exports = router;
