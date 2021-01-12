@@ -18,21 +18,21 @@
         <div class="row">
             <div class="col-md-6 m-auto">
                 <div class="container mt-5 pl-5">
-                    <h2>User Registration to Datavault Network </h2>
+                    <h2> Institution Registration to Datavault Network </h2>
                     <br>
                     <div style="width: 20rem;">
-                        <img class="card-img-top" src="/images/user.png" alt="" style="width:100px;height:100px;">
+                        <img class="card-img-top" src="/images/institution.png" alt="" style="width:100px;height:100px;">
                     </div>
                     <br>
-                    <form name="regform" method="POST" action="/register" onsubmit="return valForm()">
+                    <form name="regform" method="POST" action="/iregister" onsubmit="return valForm()">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="Username">Username</label>
                                 <input name="username" type="text" placeholder="username" required="required" class="form-control">
 
                             </div>
+                            <input type="hidden" name="orgname" id="orgname" value="Org2">
 
-                            <input type="hidden" name="orgname" id="orgname" value="Org1">
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
