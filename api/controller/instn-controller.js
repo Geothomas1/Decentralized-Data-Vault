@@ -55,7 +55,9 @@ exports.login = async(req, res) => {
                             if (isMatch) {
                                 console.log('<< Login Success >>');
                                 req.session.username = inst.username;
+                                req.session._id = inst._id;
                                 console.log('session !!', req.session.username);
+                                console.log('_ID', req.session._id)
 
                                 req.session.save(err => {
                                     if (err) {
@@ -83,4 +85,41 @@ exports.login = async(req, res) => {
         req.session.loginErr = true
         return res.render('instn/login', { status: 0, loginErr: req.session.loginErr })
     }
+};
+
+exports.addData = async(req, res) => {
+
+    console.log(req.body)
+    var id = req.session._id;
+    var username = req.session.username;
+    var name = req.body.name;
+    var type = req.body.type;
+    var address = req.body.address;
+    var district = req.body.district;
+    var state = req.body.state;
+    var pincode = req.body.pincode;
+    var phone = req.body.phone;
+    var email = req.body.email;
+    var owner = req.body.owner;
+
+    var orgname = req.body.orgName;
+    var channel = req.body.channelName;
+    var chaincode = req.body.chaincodeName;
+    var fcn = req.body.fcn;
+
+    var args = [id,
+        username,
+        name,
+        type,
+        address,
+        district,
+        state,
+        pincode,
+        phone,
+        email,
+        owner
+    ]
+    let result = await operator.createInstnAsset(orgname, username, channel, chaincode, fcn, args)
+    res.render('instn/home', { username: req.session.username })
+
 };

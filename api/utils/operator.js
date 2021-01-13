@@ -99,7 +99,7 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
             await gateway.connect(ccp, connectOptions);
             const network = await gateway.getNetwork(channel);
             const contract = network.getContract(chaincode);
-            let result = await contract.submitTransaction(fcn, args[0], args[0], args[1], args[2]);
+            let result = await contract.submitTransaction(fcn, args[0], args[0], args[1], args[2], args[3]);
             await gateway.disconnect();
             return {
                 status: 1,
@@ -165,7 +165,7 @@ const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
     }
 };
 
-const getHistory = async(userorg, username, channel, chaincode, fcn) => {
+const getHistory = async(userorg, username, channel, chaincode, fcn, args) => {
     let ccp = await helper.getCCP(userorg);
     const caURL = await helper.getCaUrl(userorg, ccp);
     const ca = new FabricCAServices(caURL);
@@ -186,7 +186,7 @@ const getHistory = async(userorg, username, channel, chaincode, fcn) => {
             await gateway.connect(ccp, connectOptions);
             const network = await gateway.getNetwork(channel);
             const contract = network.getContract(chaincode);
-            let result = await contract.evaluateTransaction(fcn, username);
+            let result = await contract.evaluateTransaction(fcn, args[0]);
             await gateway.disconnect();
             return {
                 result: JSON.parse(Buffer.from(result).toString('utf8')),
@@ -205,10 +205,53 @@ const getHistory = async(userorg, username, channel, chaincode, fcn) => {
     }
 };
 
+const createInstnAsset = async(orgname, username, channel, chaincode, fcn, args) => {
+    let ccp = await helper.getCCP(orgname);
+    const caURL = await helper.getCaUrl(orgname, ccp);
+    const ca = new FabricCAServices(caURL);
+    const walletPath = await helper.getWalletPath(orgname);
+    const wallet = await Wallets.newFileSystemWallet(walletPath);
+    console.log(`Wallet path: ${walletPath}`);
+
+    const userIdentity = await wallet.get(username);
+    if (userIdentity) {
+        const connectOptions = {
+            wallet,
+            identity: username,
+            discovery: { enabled: true, asLocalhost: true },
+        };
+        try {
+            const gateway = new Gateway();
+            await gateway.connect(ccp, connectOptions);
+            const network = await gateway.getNetwork(channel);
+            const contract = network.getContract(chaincode);
+            let result = await contract.submitTransaction(fcn, args[0], args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
+            await gateway.disconnect();
+            return {
+                status: 1,
+                msg: `Asset added successfully`,
+                value: result
+            };
+        } catch (error) {
+            console.log(`Getting error: ${error}`);
+            return {
+                status: -1,
+                msg: error.message
+            };
+        }
+    } else {
+        console.log(`No identity for the user ${username} exists in the wallet`);
+        return {
+            status: 0,
+            msg: username + ' not enrolled',
+        };
+    }
+};
 
 module.exports = {
     enrollUser: enrollUser,
     createAsset: createAsset,
     queryAsset: queryAsset,
     getHistory: getHistory,
+    createInstnAsset: createInstnAsset,
 };

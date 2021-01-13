@@ -56,6 +56,8 @@ exports.login = async(req, res) => {
                             if (isMatch) {
                                 console.log('<< Login Success >>');
                                 req.session.username = usr.username;
+                                req.session._id = usr._id;
+                                console.log("_ID", req.session._id)
                                 console.log('session !!', req.session);
 
                                 req.session.save(err => {
@@ -96,7 +98,8 @@ exports.addData = async(req, res) => {
     var fcn = req.body.fcn;
     var phone = req.body.phone;
     var email = req.body.email;
-    var args = [username, email, phone]
+    var id = req.session._id;
+    var args = [id, username, email, phone]
     let result = await operator.createAsset(orgname, username, channel, chaincode, fcn, args)
     res.render('user/home', { username: req.session.username })
 
@@ -109,7 +112,8 @@ exports.viewData = async(req, res) => {
     var channel = req.query.channelName;
     var chaincode = req.query.chaincodeName;
     var fcn = req.query.fcn;
-    var args = [username];
+    var id = req.session._id;
+    var args = [id];
     let result = await operator.queryAsset(userorg, username, channel, chaincode, fcn, args)
     console.log(result)
 
@@ -124,7 +128,9 @@ exports.viewHistory = async(req, res) => {
     var channel = req.query.channelName;
     var chaincode = req.query.chaincodeName;
     var fcn = req.query.fcn;
-    let result = await operator.getHistory(userorg, username, channel, chaincode, fcn)
+    var id = req.session._id;
+    var args = [id];
+    let result = await operator.getHistory(userorg, username, channel, chaincode, fcn, args)
     console.log(result)
 
 

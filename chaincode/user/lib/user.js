@@ -13,51 +13,61 @@ class User extends Contract {
     async initLedger(ctx) {
         console.info('============= START : Initialize Ledger ===========');
         const users = [{
+                id: '0',
                 username: 'User0',
                 email: 'testd0@gmail.com',
                 phone: '9999999990',
             },
             {
+                id: '1',
                 username: 'User1',
                 email: 'testd1@gmail.com',
                 phone: '9999999991',
             },
             {
+                id: '2',
                 username: 'User2',
                 email: 'testd2@gmail.com',
                 phone: '9999999992',
             },
             {
+                id: '3',
                 username: 'User3',
                 email: 'testd3@gmail.com',
                 phone: '9999999993',
             },
             {
+                id: '4',
                 username: 'User4',
                 email: 'testd4@gmail.com',
                 phone: '9999999994',
             },
             {
+                id: '5',
                 username: 'User5',
                 email: 'testd5@gmail.com',
                 phone: '9999999995',
             },
             {
+                id: '6',
                 username: 'User6',
                 email: 'testd6@gmail.com',
                 phone: '9999999996',
             },
             {
+                id: '7',
                 username: 'User7',
                 email: 'testd7@gmail.com',
                 phone: '9999999997',
             },
             {
+                id: '8',
                 username: 'User8',
                 email: 'testd8@gmail.com',
                 phone: '9999999998',
             },
             {
+                id: '9',
                 username: 'User9',
                 email: 'testd9@gmail.com',
                 phone: '9999999999',
@@ -81,9 +91,10 @@ class User extends Contract {
         return userAsBytes.toString();
     }
 
-    async createUser(ctx, userNumber, username, email, phone) {
+    async createUser(ctx, userNumber, id, username, email, phone) {
         console.info('============= START : Create User ===========');
         const user = {
+            id,
             username,
             email,
             phone,
@@ -93,9 +104,9 @@ class User extends Contract {
         console.info('============= END : Create User Success ===========');
     }
 
-    async queryUserById(ctx, userName) {
+    async queryUserById(ctx, id) {
             console.info('============= START : queryUserById ===========');
-            const userAsBytes = await ctx.stub.getState(userName);
+            const userAsBytes = await ctx.stub.getState(id);
             if (!userAsBytes || userAsBytes.length === 0) {
                 return;
             }
@@ -103,8 +114,8 @@ class User extends Contract {
         }
         //get data history
 
-    async retrieveHistory(ctx, userName) {
-        console.info('getting history for key: ' + userName);
+    async retrieveHistory(ctx, id) {
+        console.info('getting history for key: ' + id);
         // let iterator = await ctx.stub.getHistoryForKey(userName);
         // let result = [];
         // let res = await iterator.next();
@@ -118,7 +129,7 @@ class User extends Contract {
         // }
         // await iterator.close();
         // return result;
-        const promiseOfIterator = ctx.stub.getHistoryForKey(userName);
+        const promiseOfIterator = ctx.stub.getHistoryForKey(id);
         const results = [];
         for await (const keyMod of promiseOfIterator) {
             const resp = {

@@ -14,5 +14,8 @@ router.get('/home', (req, res) => res.render('instn/home', { username: req.sessi
 router.get('/addData', (req, res) => {
     res.render('instn/addData', { username: req.session.username })
 })
+router.post('/addData', instn.addData);
+
+
 
 module.exports = router;
