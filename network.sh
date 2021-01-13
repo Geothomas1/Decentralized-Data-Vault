@@ -10,8 +10,8 @@ CLI_DELAY=3
 
 CHANNEL_NAME="mychannel"
 CC_SRC_LANGUAGE="javascript"
-CC_SRC_PATH="./chaincode/user/"
-CC_NAME="user"
+CC_SRC_PATH="./chaincode/institution/"
+CC_NAME="institution"
 CC_VERSION="1.0"
 CC_INIT_FCN="initLedger"
 CC_SEQUENCE=1
@@ -56,7 +56,8 @@ function networkDown() {
 }
 
 function createOrgs() {
-  rm -rf javascript/wallet/*
+  rm -rf api/org1-wallet
+  rm -rf api/org2-wallet
   if [ -d "organizations/peerOrganizations" ]; then
     rm -Rf organizations/peerOrganizations && rm -Rf organizations/ordererOrganizations
   fi

@@ -15,7 +15,7 @@ exports.checkUser = (req, res, next) => {
                 next();
             } else {
                 console.log(req.session.user.username + ' not found');
-                return res.status(404).json({ status: 0, msg: req.username + ' not found' });
+                return res.status(404).json({ status: 0, msg: req.session.user.username + ' not found' });
             }
         }
     });
@@ -45,7 +45,7 @@ exports.register = async (req, res) => {
                 }
             });
         } else {
-            console.log(result.msg);
+            console.log(result.msg);req.body
             return res.status(500).json({ status: 0, msg: result.msg });
         }
     } else {
