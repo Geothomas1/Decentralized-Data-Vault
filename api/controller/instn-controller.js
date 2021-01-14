@@ -70,7 +70,7 @@ exports.login = async(req, res) => {
                         if (err) {
                             console.log('Something went wrong');
                             req.session.loginErr = true;
-                            return res.render('instn/login', { status: 0, loginErr: req.session.loginErr });
+                            return res.render('instn/login', { status: 0, success: 0, loginErr: req.session.loginErr });
                         } else {
                             if (isMatch) {
                                 console.log('<< Login Success >>');
@@ -90,14 +90,14 @@ exports.login = async(req, res) => {
                             } else {
                                 console.log('Password incorrect');
                                 req.session.loginErr = true
-                                return res.render('instn/login', { status: 0, loginErr: req.session.loginErr });
+                                return res.render('instn/login', { status: 0, success: 0, loginErr: req.session.loginErr });
                             }
                         }
                     });
                 } else {
                     console.log(req.username + ' doesnot exists');
                     req.session.loginErr = true;
-                    return res.render('instn/login', { status: 0, loginErr: req.session.loginErr });
+                    return res.render('instn/login', { status: 0, success: 0, loginErr: req.session.loginErr });
                 }
             }
         });
