@@ -21,7 +21,7 @@ exports.checkUser = (req, res, next) => {
     });
 };
 
-exports.register = async (req, res) => {
+exports.register = async(req, res) => {
     console.log('In user register', req.body);
     if (req.body.orgname && req.body.username && req.body.password) {
         let result = await operator.enrollUser(req.body.orgname, req.body.username);
@@ -41,11 +41,15 @@ exports.register = async (req, res) => {
                     return res.status(500).json({ status: 0, msg: err.msg });
                 } else {
                     console.log('User saved successfully', usr);
-                    return res.status(200).json({ status: 1, msg: req.body.username + ` enrolled and saved successfully` });
+                    req.session.loginErr = false;
+                    return res.render('user/login', { status: 0, success: 1, loginErr: req.session.loginErr });
+                    //return res.status(200).json({ status: 1, msg: req.body.username + ` enrolled and saved successfully` });
+
                 }
             });
         } else {
-            console.log(result.msg);req.body
+            console.log(result.msg);
+            req.body;
             return res.status(500).json({ status: 0, msg: result.msg });
         }
     } else {
@@ -54,7 +58,7 @@ exports.register = async (req, res) => {
     }
 };
 
-exports.login = async (req, res) => {
+exports.login = async(req, res) => {
     console.log('In user login', req.body);
     if (req.body.username && req.body.password) {
         User.findOne({ username: req.body.username }, (err, usr) => {
@@ -106,7 +110,7 @@ exports.login = async (req, res) => {
     }
 };
 
-exports.addData = async (req, res) => {
+exports.addData = async(req, res) => {
     console.log('In user addData', req.body);
     if (req.body) {
         var args = [req.user._id, req.user.username, req.body.email, req.body.phone];
@@ -124,7 +128,7 @@ exports.addData = async (req, res) => {
     }
 };
 
-exports.viewData = async (req, res) => {
+exports.viewData = async(req, res) => {
     console.log('In user viewData');
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryUser', [req.user._id]);
     console.log('result :', result);
@@ -136,12 +140,13 @@ exports.viewData = async (req, res) => {
     }
 };
 
-exports.viewHistory = async (req, res) => {
-    console.log('In user viewHistory');
+exports.viewHistory = async(req, res) => {
+    console.log('In user viewHistory', req.user);
+
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryUserHistory', [req.user._id])
     console.log('result :', result);
     if (result.status == 1) {
-        
+
     } else {
         console.log(result.msg);
         return res.status(500).json({ status: 0, msg: result.msg });

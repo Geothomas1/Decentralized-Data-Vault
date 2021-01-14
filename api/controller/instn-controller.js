@@ -21,7 +21,7 @@ exports.checkInstn = (req, res, next) => {
     });
 };
 
-exports.register = async (req, res) => {
+exports.register = async(req, res) => {
     console.log('In institution register', req.body);
     if (req.body.orgname && req.body.username && req.body.password) {
         let result = await operator.enrollUser(req.body.orgname, req.body.username);
@@ -41,7 +41,9 @@ exports.register = async (req, res) => {
                     return res.status(500).json({ status: 0, msg: err.msg });
                 } else {
                     console.log('Institution saved successfully', usr);
-                    return res.status(200).json({ status: 1, msg: req.body.username + ` enrolled and saved successfully` });
+                    req.session.loginErr = false;
+                    return res.render('instn/login', { status: 0, success: 1, loginErr: req.session.loginErr });
+                    //return res.status(200).json({ status: 1, msg: req.body.username + ` enrolled and saved successfully` });
                 }
             });
         } else {
@@ -54,7 +56,7 @@ exports.register = async (req, res) => {
     }
 };
 
-exports.login = async (req, res) => {
+exports.login = async(req, res) => {
     console.log('In institution login', req.body);
     if (req.body.username && req.body.password) {
         Instn.findOne({ username: req.body.username }, (err, inst) => {
@@ -106,7 +108,7 @@ exports.login = async (req, res) => {
     }
 };
 
-exports.addData = async (req, res) => {
+exports.addData = async(req, res) => {
     console.log('In institution addData', req.body);
     if (req.body.username && req.body.name && req.body.type && req.body.address && req.body.district && req.body.state && req.body.pincode && req.body.phone && req.body.email && req.body.owner) {
         let result = await operator.createAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'createInstn', [

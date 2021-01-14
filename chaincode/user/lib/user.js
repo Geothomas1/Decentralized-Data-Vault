@@ -26,8 +26,7 @@ class User extends Contract {
                 email: 'user1@gmail.com',
                 phone: '9999999991',
             }
-        },
-        ];
+        }, ];
 
         for (let i = 0; i < users.length; i++) {
             users[i].data.docType = 'user';
@@ -62,8 +61,21 @@ class User extends Contract {
 
     async queryUserHistory(ctx, _id) {
         console.info('============= START : Query User History ===========');
-        const history = await ctx.stub.getHistoryForKey(_id);
-        return history.toString();
+        const promiseOfIterator = ctx.stub.getHistoryForKey(_id);
+        const results = [];
+        for await (const keyMod of promiseOfIterator) {
+            const resp = {
+                timestamp: keyMod.timestamp,
+                txid: keyMod.tx_id
+            }
+            if (keyMod.is_delete) {
+                resp.data = 'KEY DELETED';
+            } else {
+                resp.data = keyMod.value.toString('utf8');
+            }
+            results.push(resp);
+        }
+        return results;
     }
 
 }

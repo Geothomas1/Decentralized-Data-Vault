@@ -31,26 +31,31 @@
                             </div>
 
                             <% } %>
-                                <div style="width: 20rem;">
-                                    <img class="card-img-top" src="/images/login.png" alt="" style="width:100px;height:100px;">
-                                </div>
-
-                                <div class="row">
-                                    <div class="col col-md-6">
-                                        <input name="username" type="text" placeholder="Username" class="form-control" required>
+                                <%if(success==1) { %>
+                                    <div class="alert alert-success">
+                                        <strong> Registered Successfully</strong>
                                     </div>
-                                </div>
-                                <br>
-                                <br>
-                                <div class="row">
-                                    <div class="col col-md-6">
-                                        <input name="password" type="password" placeholder="Password" class="form-control" required>
-                                    </div>
-                                </div>
-                                <br>
-                                <br>
+                                    <% } %>
+                                        <div style="width: 20rem;">
+                                            <img class="card-img-top" src="/images/login.png" alt="" style="width:100px;height:100px;">
+                                        </div>
 
-                                <button type="submit" class="btn btn-primary">Login</button>
+                                        <div class="row">
+                                            <div class="col col-md-6">
+                                                <input name="username" type="text" placeholder="Username" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <div class="row">
+                                            <div class="col col-md-6">
+                                                <input name="password" type="password" placeholder="Password" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <br>
+
+                                        <button type="submit" class="btn btn-primary">Login</button>
 
                     </form>
                 </div>

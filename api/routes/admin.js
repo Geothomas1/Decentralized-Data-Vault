@@ -13,6 +13,7 @@ router.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/admin/login');
 });
+router.get('/verify')
 
 
 module.exports = router;
