@@ -10,7 +10,7 @@
 
 </head>
 <header>
-    <%- include('../partials/adminHeader'); %>
+    <%- include('../partials/admin-Header'); %>
 </header>
 
 <body>
@@ -23,7 +23,7 @@
                     <br>
                     <br>
 
-                    <form name="loginform" method="POST" action="/user/login" onsubmit="return valForm()">
+                    <form name="loginform" method="POST" action="/admin/login" onsubmit="return valForm()">
                         <%if (loginErr) { %>
 
                             <div class="alert alert-danger">
