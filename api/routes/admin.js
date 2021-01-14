@@ -15,5 +15,9 @@ router.get('/logout', (req, res) => {
 });
 router.get('/verify', admin.viewInsts)
 
+router.get('/verifyList', (req, res) => {
+    res.render('admin/verifyList', { username: req.session.username })
+})
+
 
 module.exports = router;

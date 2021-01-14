@@ -22,6 +22,6 @@ exports.login = async(req, res) => {
 };
 exports.viewInsts = async(req, res) => {
     let result = await operator.queryAsset('Org1', 'admin', 'mychannel', 'institution', 'queryAllInstsData', [0])
-    console.log(result)
+    console.log(result.result)
 
 }
