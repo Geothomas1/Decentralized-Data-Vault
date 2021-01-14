@@ -3,7 +3,7 @@ const FabricCAServices = require('fabric-ca-client');
 const { Gateway, Wallets } = require('fabric-network');
 const helper = require('./helper');
 
-const enrollUser = async (orgname, username) => {
+const enrollUser = async(orgname, username) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
     const ca = new FabricCAServices(caURL);
@@ -79,7 +79,7 @@ const enrollUser = async (orgname, username) => {
     }
 };
 
-const createAsset = async (orgname, username, channel, chaincode, fcn, args) => {
+const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
     const ca = new FabricCAServices(caURL);
@@ -101,16 +101,16 @@ const createAsset = async (orgname, username, channel, chaincode, fcn, args) => 
             const contract = network.getContract(chaincode);
             switch (fcn) {
                 case 'createUser':
-                   var result = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3]);
+                    var result = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3]);
                     await gateway.disconnect();
                     return {
                         status: 1,
                         msg: `Asset added successfully`,
                         value: result
                     };
-                
+
                 case 'createInstn':
-                   var result = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
+                    var result = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
                     await gateway.disconnect();
                     return {
                         status: 1,
@@ -142,7 +142,7 @@ const createAsset = async (orgname, username, channel, chaincode, fcn, args) => 
     }
 };
 
-const queryAsset = async (userorg, username, channel, chaincode, fcn, args) => {
+const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
     let ccp = await helper.getCCP(userorg);
     const caURL = await helper.getCaUrl(userorg, ccp);
     const ca = new FabricCAServices(caURL);
@@ -172,6 +172,14 @@ const queryAsset = async (userorg, username, channel, chaincode, fcn, args) => {
                         status: 1,
                         msg: `Asset fetched successfully`,
                         result: JSON.parse(Buffer.from(result).toString('utf8')),
+                    };
+                case 'queryAllInstsData':
+                    let result2 = await contract.evaluateTransaction(fcn);
+                    await gateway.disconnect();
+                    return {
+                        status: 1,
+                        msg: `Return All Instns Data successfully`,
+                        result: JSON.parse(Buffer.from(result2).toString('utf8')),
                     };
 
                 default:

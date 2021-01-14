@@ -20,3 +20,8 @@ exports.login = async(req, res) => {
         return res.render('admin/login', { status: 0, loginErr: req.session.loginErr })
     }
 };
+exports.viewInsts = async(req, res) => {
+    let result = await operator.queryAsset('Org1', 'admin', 'mychannel', 'institution', 'queryAllInstsData', [0])
+    console.log(result)
+
+}

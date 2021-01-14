@@ -10,8 +10,8 @@ CLI_DELAY=3
 
 CHANNEL_NAME="mychannel"
 CC_SRC_LANGUAGE="javascript"
-CC_SRC_PATH="./chaincode/user/"
-CC_NAME="user"
+CC_SRC_PATH="./chaincode/institution/"
+CC_NAME="institution"
 CC_VERSION="1.0"
 CC_INIT_FCN="initLedger"
 CC_SEQUENCE=1
