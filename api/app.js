@@ -35,8 +35,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 logger.level = 'debug';
 
-const db = 'mongodb://manuel:manuel@127.0.0.1/ddvault?authSource=admin';
-// const db = 'mongodb://myUserAdmin:pwd@127.0.0.1/ddvault?authSource=admin';
+//const db = 'mongodb://manuel:manuel@127.0.0.1/ddvault?authSource=admin';
+const db = 'mongodb://myUserAdmin:pwd@127.0.0.1/ddvault?authSource=admin';
 mongoose.connect(db, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true });
 const connection = mongoose.connection;
 connection.once('open', () => {
@@ -50,6 +50,8 @@ http.createServer(app).listen(port, () => {
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 const instnRouter = require('./routes/instn');
+const adminRouter = require('./routes/admin')
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/instn', instnRouter);
+app.use('/admin', adminRouter);
