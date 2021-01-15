@@ -22,19 +22,10 @@
                     <h2>Add Data to Datavault Network </h2>
                     <br>
                     <br>
-
                     <form name="addDataform" method="POST" action="/instn/addData" onsubmit="return valForm()">
                         <div class="row">
                             <div class="col col-md-6">
                                 <input name="username" type="text" value="<%= username %>" placeholder="Username" class="form-control" required readonly>
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                        <div class="row">
-                            <div class="col col-md-6">
-                                <input tyep="text" name="address" class="form-control" placeholder="Address Eg:No 20 Street.." required>
-
                             </div>
                         </div>
                         <br>
@@ -46,10 +37,52 @@
                         </div>
                         <br>
                         <br>
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <input name="code" type="text" placeholder="Institution Code Eg:MGU" class="form-control" required>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <input name="type" type="text" placeholder="Type Eg:University" class="form-control" required>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <input name="address" type="text"  class="form-control" placeholder="Address Eg:No 20 Street.." required>
 
+                            </div>
+                        </div>
+                        <br>
+                        <br>
                         <div class="row">
                             <div class="col col-md-6">
                                 <input name="district" type="text" placeholder="District Eg:Kottayam" class="form-control" required>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <input name="state" type="text" placeholder="State Eg:Kottayam" class="form-control" required>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <input name="pincode" type="text" placeholder="Pincode Eg:686546" class="form-control" required>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <input name="phone" type="phone" placeholder="Phone Eg:0481 2445343" class="form-control" required>
                             </div>
                         </div>
                         <br>
@@ -68,36 +101,7 @@
                         </div>
                         <br>
                         <br>
-                        <div class="row">
-                            <div class="col col-md-6">
-                                <input name="phone" type="phone" placeholder="Phone Eg:0481 2445343" class="form-control" required>
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                        <div class="row">
-                            <div class="col col-md-6">
-                                <input name="pincode" type="text" placeholder="Pincode Eg:686546" class="form-control" required>
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                        <div class="row">
-                            <div class="col col-md-6">
-                                <input name="state" type="text" placeholder="State Eg:Kottayam" class="form-control" required>
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                        <div class="row">
-                            <div class="col col-md-6">
-                                <input name="type" type="text" placeholder="Type Eg:University" class="form-control" required>
-                            </div>
-                        </div>
-                        <br>
-                        <br>
                         <button type="submit" class="btn btn-primary">Add</button>
-
                     </form>
                 </div>
             </div>

@@ -3,6 +3,16 @@ const operator = require('../utils/operator');
 
 const Instn = require('../models/instn-schema');
 
+const makeid = (length) => {
+    var result = '';
+    var characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+};
+
 exports.checkInstn = (req, res, next) => {
     console.log('In checkInstn', req.session);
     Instn.findOne({ _id: req.session.user._id }, (err, inst) => {
@@ -21,7 +31,7 @@ exports.checkInstn = (req, res, next) => {
     });
 };
 
-exports.register = async(req, res) => {
+exports.register = async (req, res) => {
     console.log('In institution register', req.body);
     if (req.body.orgname && req.body.username && req.body.password) {
         let result = await operator.enrollUser(req.body.orgname, req.body.username);
@@ -56,7 +66,7 @@ exports.register = async(req, res) => {
     }
 };
 
-exports.login = async(req, res) => {
+exports.login = async (req, res) => {
     console.log('In institution login', req.body);
     if (req.body.username && req.body.password) {
         Instn.findOne({ username: req.body.username }, (err, inst) => {
@@ -108,13 +118,13 @@ exports.login = async(req, res) => {
     }
 };
 
-exports.addData = async(req, res) => {
+exports.addData = async (req, res) => {
     console.log('In institution addData', req.body);
-    if (req.body.username && req.body.name && req.body.type && req.body.address && req.body.district && req.body.state && req.body.pincode && req.body.phone && req.body.email && req.body.owner) {
+    if (req.body.name && req.body.code && req.body.type && req.body.address && req.body.district && req.body.state && req.body.pincode && req.body.phone && req.body.email && req.body.owner) {
         let result = await operator.createAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'createInstn', [
             req.user._id,
-            req.body.username,
             req.body.name,
+            req.body.code,
             req.body.type,
             req.body.address,
             req.body.district,
@@ -122,7 +132,8 @@ exports.addData = async(req, res) => {
             req.body.pincode,
             req.body.phone,
             req.body.email,
-            req.body.owner
+            req.body.owner,
+            0
         ]);
         console.log('result : ', result);
         if (result.status == 1) {
@@ -136,3 +147,51 @@ exports.addData = async(req, res) => {
         return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
     }
 };
+
+exports.viewData = async (req, res) => {
+    console.log('In institution viewData');
+    let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'queryInstn', [req.user._id]);
+    console.log('result :', result);
+    if (result.status == 1) {
+        //returning data
+    } else {
+        console.log(result.msg);
+        return res.status(500).json({ status: 0, msg: result.msg });
+    }
+};
+
+exports.showPrivilege = async (req, res) => {
+    console.log('In institution showPrivilege');
+    let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'queryInstn', [req.user._id]);
+    console.log('result :', result);
+    if (result.status == 1) {
+        res.render('instn/requestPrivilege', { username: req.session.user.username, data: result.result, request: 0 })
+    } else {
+        console.log(result.msg);
+        return res.status(500).json({ status: 0, msg: result.msg });
+    }
+};
+
+exports.requestPrivilege = async (req, res) => {
+    console.log('In institution requestPrivilege', req.body);
+    if(req.body.desc){
+        let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'addPrevilege', [req.user._id, makeid(5), req.body.desc, 0]);
+        console.log('result :', result);
+    }else{
+        console.log('Invalid format');
+        return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
+    }
+    // console.log(req.body.status)
+
+    // //console.log('user', req.session.user.username, req.session.user._id)
+    // let result = await operator.createAsset('Org2', req.session.user.username, 'mychannel', 'institution', 'changeInstStatus', [req.session.user._id, req.body.status]);
+    // console.log(result)
+    // if (result.status == 1) {
+    //     res.redirect('/instn/requestPrivilege');
+    // } else {
+    //     console.log(result.msg);
+    //     return res.status(500).json({ status: 0, msg: result.msg });
+    // }
+
+
+}
