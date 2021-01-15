@@ -25,6 +25,7 @@ class Institution extends Contract {
                     phone: '+9104852554570',
                     email: 'mgu@mgu.ac.in',
                     owner: 'Government of Kerala',
+                    status: '0',
                 }
             },
             {
@@ -40,6 +41,7 @@ class Institution extends Contract {
                     phone: '+911824517000',
                     email: 'info@lpu.co.in',
                     owner: 'Private',
+                    status: '0',
                 }
             },
         ];
@@ -52,7 +54,7 @@ class Institution extends Contract {
         console.info('============= END : Initialize Ledger ===========');
     }
 
-    async createInstn(ctx, _id, username, name, type, address, district, state, pincode, phone, email, owner) {
+    async createInstn(ctx, _id, username, name, type, address, district, state, pincode, phone, email, owner, status) {
         console.info('============= START : Create Instns ===========');
         const user = {
             username,
@@ -65,6 +67,7 @@ class Institution extends Contract {
             phone,
             email,
             owner,
+            status,
             docType: 'institution',
         };
         await ctx.stub.putState(_id, Buffer.from(JSON.stringify(user)));
@@ -98,6 +101,20 @@ class Institution extends Contract {
         }
         console.info(allResults);
         return JSON.stringify(allResults);
+    }
+
+    async changeInstStatus(ctx, InstnNumber, status) {
+        console.info('============= changeInstStatusSTART : change Status ===========');
+
+        const InstnAsBytes = await ctx.stub.getState(InstnNumber); // get the car from chaincode state
+        if (!InstnAsBytes || InstnAsBytes.length === 0) {
+            throw new Error(`${InstnNumber} does not exist`);
+        }
+        const instn = JSON.parse(InstnAsBytes.toString());
+        instn.status = status;
+
+        await ctx.stub.putState(InstnNumber, Buffer.from(JSON.stringify(instn)));
+        console.info('============= END : change Status ===========');
     }
 
 

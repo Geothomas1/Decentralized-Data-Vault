@@ -110,13 +110,22 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
                     };
 
                 case 'createInstn':
-                    var result = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
+                    var result = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11]);
                     await gateway.disconnect();
                     return {
                         status: 1,
                         msg: `Asset added successfully`,
                         value: result
                     };
+                case 'changeInstStatus':
+                    var result2 = await contract.submitTransaction(fcn, args[0], args[1]);
+                    await gateway.disconnect();
+                    return {
+                        status: 1,
+                        msg: `status updated successfully`,
+                        value: result2
+                    };
+
 
                 default:
                     await gateway.disconnect();
@@ -181,6 +190,7 @@ const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
                         msg: `Return All Instns Data successfully`,
                         result: JSON.parse(Buffer.from(result2).toString('utf8')),
                     };
+
 
                 default:
                     await gateway.disconnect();

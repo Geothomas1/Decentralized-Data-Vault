@@ -122,7 +122,8 @@ exports.addData = async(req, res) => {
             req.body.pincode,
             req.body.phone,
             req.body.email,
-            req.body.owner
+            req.body.owner,
+            req.body.status
         ]);
         console.log('result : ', result);
         if (result.status == 1) {
@@ -136,3 +137,18 @@ exports.addData = async(req, res) => {
         return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
     }
 };
+exports.requestPermission = async(req, res) => {
+    console.log(req.body.status)
+
+    //console.log('user', req.session.user.username, req.session.user._id)
+    let result = await operator.createAsset('Org2', req.session.user.username, 'mychannel', 'institution', 'changeInstStatus', [req.session.user._id, req.body.status]);
+    console.log(result)
+    if (result.status == 1) {
+        res.redirect('/instn/requestPermission');
+    } else {
+        console.log(result.msg);
+        return res.status(500).json({ status: 0, msg: result.msg });
+    }
+
+
+}

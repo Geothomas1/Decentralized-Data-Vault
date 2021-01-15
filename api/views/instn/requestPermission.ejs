@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Data Vault</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/javascripts/script.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+</head>
+<header>
+    <%- include('../partials/instn-Homeheader'); %>
+</header>
+
+<body>
+
+    <section>
+        <div class="container mt-5">
+            <div class="row">
+                <div class="jumbotron">
+                    <h3 class="display-5">ASKING FOR ADMINISTRATORS PERMISSION</h3>
+                    <br>
+                    <p class="lead"><b><%= username %></b> Institution hereby declare that the information furnished above is true, complete and correct to the best of my knowledge and belief. understand that in the event of my information being found false or incorrect
+                        at any stage, Institution permission to Access user data shall be liable to cancellation / termination without notice or any compensation in lieu thereof.</p>
+                    <hr class="my-4">
+                    <p>Confirm your request to admin authority </p>
+                    <p class="lead">
+                        <form name="addDataform" method="POST" action="/instn/requestPermission" onsubmit="return valForm()">
+                            <input type="hidden" name="status" value="1">
+                            <button class="btn btn-info btn-lg" role="button">Confirm</button>
+                        </form>
+                    </p>
+                </div>
+
+
+            </div>
+        </div>
+
+    </section>
+
+</body>
+
+</html>
+
+<script>
+    function valForm() {
+        console.log("Validating Form");
+        return true;
+    }
+</script>
