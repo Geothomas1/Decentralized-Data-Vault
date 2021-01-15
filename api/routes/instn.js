@@ -17,9 +17,7 @@ router.get('/home', (req, res) => res.render('instn/home', { username: req.sessi
 
 router.get('/addData', (req, res) => res.render('instn/addData', { username: req.session.user.username }));
 router.post('/addData', instn.checkInstn, instn.addData);
-// router.get('/permission', (req, res) => {
-//     res.render('instn/requestPermission', { username: req.session.user.username, request: 0 })
-// })
+
 router.get('/privileges', instn.checkInstn, instn.showPrivilege);
 router.post('/requestPrivilege', instn.checkInstn, instn.requestPrivilege);
 

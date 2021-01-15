@@ -165,7 +165,7 @@ exports.showPrivilege = async (req, res) => {
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'queryInstn', [req.user._id]);
     console.log('result :', result);
     if (result.status == 1) {
-        res.render('instn/requestPrivilege', { username: req.session.user.username, data: result.result, request: 0 })
+        res.render('instn/requestPrivilege', { username: req.session.user.username, data: result.result})
     } else {
         console.log(result.msg);
         return res.status(500).json({ status: 0, msg: result.msg });
@@ -174,24 +174,17 @@ exports.showPrivilege = async (req, res) => {
 
 exports.requestPrivilege = async (req, res) => {
     console.log('In institution requestPrivilege', req.body);
-    if(req.body.desc){
+    if (req.body.desc) {
         let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'addPrevilege', [req.user._id, makeid(5), req.body.desc, 0]);
         console.log('result :', result);
-    }else{
+        if (result.status == 1) {
+            res.redirect('/instn/requestPrivilege');
+        } else {
+            console.log(result.msg);
+            return res.status(500).json({ status: 0, msg: result.msg });
+        }
+    } else {
         console.log('Invalid format');
         return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
     }
-    // console.log(req.body.status)
-
-    // //console.log('user', req.session.user.username, req.session.user._id)
-    // let result = await operator.createAsset('Org2', req.session.user.username, 'mychannel', 'institution', 'changeInstStatus', [req.session.user._id, req.body.status]);
-    // console.log(result)
-    // if (result.status == 1) {
-    //     res.redirect('/instn/requestPrivilege');
-    // } else {
-    //     console.log(result.msg);
-    //     return res.status(500).json({ status: 0, msg: result.msg });
-    // }
-
-
 }

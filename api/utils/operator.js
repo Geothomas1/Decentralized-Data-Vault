@@ -183,7 +183,7 @@ const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
                         msg: `Asset fetched successfully`,
                         result: JSON.parse(Buffer.from(result1).toString('utf8')),
                     };
-                case 'queryAllInsts':
+                case 'queryAllInstn':
                     let result2 = await contract.evaluateTransaction(fcn);
                     await gateway.disconnect();
                     return {
