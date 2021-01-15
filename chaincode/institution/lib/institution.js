@@ -13,45 +13,43 @@ class Institution extends Contract {
     async initLedger(ctx) {
         console.info('============= START : Initialize Ledger ===========');
         const instns = [{
-            _id: '5ffd7158e71ab969f7cabfef',
-            data: {
-                name: 'Mahathma Gandhi University',
-                code: 'MGU',
-                type: 'University',
-                address: 'Priyadarsini Hills',
-                district: 'Kottayam',
-                state: 'Kerala',
-                pincode: '686560',
-                phone: '+9104852554570',
-                email: 'mgu@mgu.ac.in',
-                owner: 'Government of Kerala',
-                status: '0',
-                privileges: [
-                    {
+                _id: '5ffd7158e71ab969f7cabfef',
+                data: {
+                    name: 'Mahathma Gandhi University',
+                    code: 'MGU',
+                    type: 'University',
+                    address: 'Priyadarsini Hills',
+                    district: 'Kottayam',
+                    state: 'Kerala',
+                    pincode: '686560',
+                    phone: '+9104852554570',
+                    email: 'mgu@mgu.ac.in',
+                    owner: 'Government of Kerala',
+                    status: '0',
+                    privileges: [{
                         _id: '11aaj',
                         name: 'Provide qualification for the citizens',
                         status: 0,
-                    },
-                ],
-            }
-        },
-        {
-            _id: '5ffd734bcc5dfa3b4e888282',
-            data: {
-                name: 'Lovely Professional University',
-                code: 'LPU',
-                type: 'University',
-                address: 'Jalandhar - Delhi G.T. Road',
-                district: 'Phagwara',
-                state: 'Punjab',
-                pincode: '144411',
-                phone: '+911824517000',
-                email: 'info@lpu.co.in',
-                owner: 'Private',
-                status: '0',
-                privileges: [],
-            }
-        },
+                    }, ],
+                }
+            },
+            {
+                _id: '5ffd734bcc5dfa3b4e888282',
+                data: {
+                    name: 'Lovely Professional University',
+                    code: 'LPU',
+                    type: 'University',
+                    address: 'Jalandhar - Delhi G.T. Road',
+                    district: 'Phagwara',
+                    state: 'Punjab',
+                    pincode: '144411',
+                    phone: '+911824517000',
+                    email: 'info@lpu.co.in',
+                    owner: 'Private',
+                    status: '0',
+                    privileges: [],
+                }
+            },
         ];
 
         for (let i = 0; i < instns.length; i++) {
@@ -79,7 +77,10 @@ class Institution extends Contract {
             privileges: [],
             docType: 'institution',
         };
+
         await ctx.stub.putState(_id, Buffer.from(JSON.stringify(user)));
+        let txt_id = ctx.stub.getTxID();
+        return JSON.stringify(txt_id);
         console.info('============= END : Create Instns Success ===========');
     };
 

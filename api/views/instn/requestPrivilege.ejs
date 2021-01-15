@@ -27,9 +27,11 @@
 
                                 <% } else { %>
                                     <% for(var i=0; i < data.privileges.length; i ++){%>
-                                        <%= data.privileges[i] %>
-                                            <% }%>
-                                                <% } %>
+                                        <div class="alert alert-warning" role="alert">
+                                            <%= data.privileges[i] %>
+                                        </div>
+                                        <% }%>
+                                            <% } %>
                         </p>
                         <hr class="my-4">
                         <div id="frm">
@@ -43,9 +45,11 @@
 
                                         <% } else { %>
                                             <% for(var i=0; i < data.privileges.length; i ++){%>
-                                                <%= data.privileges[i] %>
-                                                    <% }%>
-                                                        <% } %>
+                                                <div class="alert alert-info" role="alert">
+                                                    <%= data.privileges[i].name %> Requested
+                                                </div>
+                                                <% }%>
+                                                    <% } %>
                                 </p>
                                 <hr class="my-4">
                                 <div id="frm">

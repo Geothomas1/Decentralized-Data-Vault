@@ -115,7 +115,7 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
                     return {
                         status: 1,
                         msg: `Asset added successfully`,
-                        value: result2
+                        value: JSON.parse(Buffer.from(result2).toString('utf8'))
                     };
                 case 'changeInstStatus':
                     var result2 = await contract.submitTransaction(fcn, args[0], args[1]);
@@ -276,5 +276,6 @@ module.exports = {
     enrollUser: enrollUser,
     createAsset: createAsset,
     queryAsset: queryAsset,
-    updateAsset, updateAsset,
+    updateAsset,
+    updateAsset,
 };
