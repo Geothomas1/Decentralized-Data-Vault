@@ -31,7 +31,7 @@ exports.checkInstn = (req, res, next) => {
     });
 };
 
-exports.register = async (req, res) => {
+exports.register = async(req, res) => {
     console.log('In institution register', req.body);
     if (req.body.orgname && req.body.username && req.body.password) {
         let result = await operator.enrollUser(req.body.orgname, req.body.username);
@@ -66,7 +66,7 @@ exports.register = async (req, res) => {
     }
 };
 
-exports.login = async (req, res) => {
+exports.login = async(req, res) => {
     console.log('In institution login', req.body);
     if (req.body.username && req.body.password) {
         Instn.findOne({ username: req.body.username }, (err, inst) => {
@@ -118,7 +118,7 @@ exports.login = async (req, res) => {
     }
 };
 
-exports.addData = async (req, res) => {
+exports.addData = async(req, res) => {
     console.log('In institution addData', req.body);
     if (req.body.name && req.body.code && req.body.type && req.body.address && req.body.district && req.body.state && req.body.pincode && req.body.phone && req.body.email && req.body.owner) {
         let result = await operator.createAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'createInstn', [
@@ -148,7 +148,7 @@ exports.addData = async (req, res) => {
     }
 };
 
-exports.viewData = async (req, res) => {
+exports.viewData = async(req, res) => {
     console.log('In institution viewData');
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'queryInstn', [req.user._id]);
     console.log('result :', result);
@@ -160,25 +160,30 @@ exports.viewData = async (req, res) => {
     }
 };
 
-exports.showPrivilege = async (req, res) => {
+exports.showPrivilege = async(req, res) => {
     console.log('In institution showPrivilege');
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'queryInstn', [req.user._id]);
     console.log('result :', result);
-    if (result.status == 1) {
-        res.render('instn/requestPrivilege', { username: req.session.user.username, data: result.result})
+    console.log('result.result.privileges.length', result.result.privileges.length)
+    if (result.status == 1 && result.result.privileges.length == 0) {
+        res.render('instn/requestPrivilege', { username: req.session.user.username, data: result.result, track: 0 })
+    } else if (result.status == 1 && result.result.privileges.length != 0) {
+        console.log('Prev is not empty')
+        res.render('instn/requestPrivilege', { username: req.session.user.username, data: result.result, track: 1 })
+
     } else {
         console.log(result.msg);
         return res.status(500).json({ status: 0, msg: result.msg });
     }
 };
 
-exports.requestPrivilege = async (req, res) => {
+exports.requestPrivilege = async(req, res) => {
     console.log('In institution requestPrivilege', req.body);
     if (req.body.desc) {
         let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'addPrevilege', [req.user._id, makeid(5), req.body.desc, 0]);
         console.log('result :', result);
         if (result.status == 1) {
-            res.redirect('/instn/requestPrivilege');
+            res.redirect('/instn/home');
         } else {
             console.log(result.msg);
             return res.status(500).json({ status: 0, msg: result.msg });
