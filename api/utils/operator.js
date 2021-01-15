@@ -101,21 +101,21 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
             const contract = network.getContract(chaincode);
             switch (fcn) {
                 case 'createUser':
-                    var result = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3]);
+                    var result1 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3]);
                     await gateway.disconnect();
                     return {
                         status: 1,
                         msg: `Asset added successfully`,
-                        value: result
+                        value: result1
                     };
 
                 case 'createInstn':
-                    var result = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
+                    var result2 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
                     await gateway.disconnect();
                     return {
                         status: 1,
                         msg: `Asset added successfully`,
-                        value: result
+                        value: result2
                     };
 
                 default:
@@ -166,12 +166,12 @@ const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
             switch (fcn) {
                 case 'queryUser':
                 case 'queryUserHistory':
-                    let result = await contract.evaluateTransaction(fcn, args[0]);
+                    let result1 = await contract.evaluateTransaction(fcn, args[0]);
                     await gateway.disconnect();
                     return {
                         status: 1,
                         msg: `Asset fetched successfully`,
-                        result: JSON.parse(Buffer.from(result).toString('utf8')),
+                        result: JSON.parse(Buffer.from(result1).toString('utf8')),
                     };
                 case 'queryAllInstsData':
                     let result2 = await contract.evaluateTransaction(fcn);
