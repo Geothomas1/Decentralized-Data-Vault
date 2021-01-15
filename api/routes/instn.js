@@ -19,6 +19,8 @@ router.get('/addData', (req, res) => res.render('instn/addData', { username: req
 router.post('/addData', instn.checkInstn, instn.addData);
 
 router.get('/privileges', instn.checkInstn, instn.showPrivilege);
+
+
 router.post('/requestPrivilege', instn.checkInstn, instn.requestPrivilege);
 
 module.exports = router;

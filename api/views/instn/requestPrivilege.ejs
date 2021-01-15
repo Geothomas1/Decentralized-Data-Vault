@@ -21,19 +21,39 @@
                 <div class="jumbotron">
                     <h3 class="display-5">ASKING FOR ADMINISTRATORS PERMISSION</h3>
                     <br>
-                    <p class="lead"><b><%= data.name %></b><br>   
-                        <% if (data.privileges.length==0) { %>
-                                
-                        <% } else { %>
-                            <% for(var i=0; i < data.privileges.length; i ++){%>
-                                <%= data.privileges[i] %>
-                            <% }%>
+                    <% if(track==0) {%>
+                        <p class="lead"><b><%= data.name %></b><br>
+                            <% if (data.privileges.length==0) { %>
+
+                                <% } else { %>
+                                    <% for(var i=0; i < data.privileges.length; i ++){%>
+                                        <%= data.privileges[i] %>
+                                            <% }%>
+                                                <% } %>
+                        </p>
+                        <hr class="my-4">
+                        <div id="frm">
+                            <button class="btn btn-info btn-lg" role="button" onclick="showAddForm()">Add</button>
+                        </div>
                         <% } %>
-                    </p>
-                    <hr class="my-4">
-                    <div id="frm">
-                        <button class="btn btn-info btn-lg" role="button" onclick="showAddForm()">Add</button>
-                    </div>
+
+                            <% if(track==1) {%>
+                                <p class="lead"><b><%= data.name %></b><br>
+                                    <% if (data.privileges.length==0) { %>
+
+                                        <% } else { %>
+                                            <% for(var i=0; i < data.privileges.length; i ++){%>
+                                                <%= data.privileges[i] %>
+                                                    <% }%>
+                                                        <% } %>
+                                </p>
+                                <hr class="my-4">
+                                <div id="frm">
+                                    <button class="btn btn-warning btn-lg">Pending</button>
+                                </div>
+                                <% } %>
+
+
                 </div>
 
 
@@ -50,8 +70,9 @@
     function valForm() {
         console.log("Validating Form");
         return true;
-    }; 
-    function showAddForm(){
+    };
+
+    function showAddForm() {
         $("#frm").html("<p class='lead'>\
                             <form name='addDataform' method='POST' action='/instn/requestPrivilege' onsubmit='return valForm()'>\
                                 <input type='text' name='desc' placeholder='Please input a short and precise description'>\
