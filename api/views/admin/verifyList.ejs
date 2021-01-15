@@ -14,61 +14,51 @@
 </header>
 
 <body>
-    <section>
-
-
-
-        <% for(var i=0; i < data.length; i++){ %>
-            <% if (data[i].Record.privileges.length!=0) { %>
-                <% for(var j=0; j < data[i].Record.privileges.length; j++){ %>
-                    <% if (data[i].Record.privileges[j].status==0) { %>
-                        <div class="container mt-5">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="card border-dark">
-                                        <div class="card-body">
-                                            <h5 class="card-header">
-                                                <%= data[i].Record.name %>
-                                            </h5>
-                                            <p class="card-text">
-                                                <%= data[i].Record.address %>
-                                            </p>
-                                            <p class="card-text">
-                                                <%= data[i].Record.district%>
-                                            </p>
-                                            <p class="card-text">
-                                                <%= data[i].Record.state %>
-                                            </p>
-                                            <p class="card-text">
-                                                <%= data[i].Record.pincode %>
-                                            </p>
-                                            <p class="card-text">
-                                                <%= data[i].Record.email %>
-                                            </p>
-                                            <p class="card-text">
-                                                <%= data[i].Record.phone %>
-                                            </p>
-                                            <p class="card-text">
-                                                <b><%= data[i].Record.owner %></b>
-                                            </p>
-
-                                            <a href="#" class="btn btn-success">Approve</a>
-                                            <a href="#" class="btn btn-danger">Reject</a>
+    <div id="data">
+        <section>
+            <% for(var i=0; i < data.length; i++){ %>
+                <% if (data[i].Record.privileges.length!=0) { %>
+                    <% for(var j=0; j < data[i].Record.privileges.length; j++){ %>
+                        <% if (data[i].Record.privileges[j].status==0) { %>
+                            <div class="container mt-5">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="card border-dark">
+                                            <div class="card-body">
+                                                <h5 class="card-header">
+                                                    <%= data[i].Record.name %>
+                                                </h5>
+                                                </p>
+                                                <p class="card-text">
+                                                    <b><%= data[i].Record.owner %></b>
+                                                </p>
+                                                <a class="btn btn-success" onclick="approve(
+                                                    '<%= data[i].Key %>', 
+                                                    '<%= data[i].Record.name %>', 
+                                                    '<%= data[i].Record.code %>', 
+                                                    '<%= data[i].Record.address %>', 
+                                                    '<%= data[i].Record.district %>', 
+                                                    '<%= data[i].Record.state %>', 
+                                                    '<%= data[i].Record.pincode %>', 
+                                                    '<%= data[i].Record.phone %>',
+                                                    '<%= data[i].Record.email %>',
+                                                    '<%= data[i].Record.owner %>',
+                                                    '<%= data[i].Record.status %>',
+                                                    '<%= data[i].Record.privileges[j]._id %>',
+                                                    '<%= data[i].Record.privileges[j].name %>',
+                                                    '<%= data[i].Record.privileges[j].status %>'
+                                                )">More</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-
                         <% } %>
-                            <% } %>
-                                <% } %>
-                                    <% }%>
-
-
-    </section>
-
+                    <% } %>
+                <% } %>
+            <% } %>
+        <section>
+    </div>
 </body>
 
 </html>
@@ -77,5 +67,76 @@
     function valForm() {
         console.log("Validating Form");
         return true;
+    };
+    function approve(key, name, code, address, district, state, pin, phone, email, owner, status, pr_id, prname, prstatus){
+        console.log(key, name, code, address, district, state, pin, phone, email, owner, status, pr_id, prname, prstatus);
+        if(status == 0){
+            $('#data').html('\
+            <table>\
+                <tr>\
+                    <th>Code</th>\
+                    <td>'+ code +'</td>\
+                </tr>\
+                <tr>\
+                    <th>Name</th>\
+                    <td>'+ name +'</td>\
+                </tr>\
+                <tr>\
+                    <th>Address</th>\
+                    <td>'+ address+ ', ' +district + ', ' +state+'</td>\
+                </tr>\
+                <tr>\
+                    <th>Pin</th>\
+                    <td>'+ pin +'</td>\
+                </tr>\
+                <tr>\
+                    <th>Phone</th>\
+                    <td>'+ phone +'</td>\
+                </tr>\
+                <tr>\
+                    <th>Email</th>\
+                    <td>'+ email +'</td>\
+                </tr>\
+                <tr>\
+                    <th>Owner</th>\
+                    <td>'+ owner +'</td>\
+                </tr>\
+                <tr>\
+                    <th>Previlege</th>\
+                    <td>'+ prname +'</td>\
+                </tr>\
+            </table>\
+            <a class="btn btn-success" onclick="aprvrej(\''+key+'\', \''+pr_id+'\', 1)">Accept</a>\
+            <a class="btn btn-danger" onclick="aprvrej(\''+ key + '\', \''+ pr_id + '\', -1)">Reject</a>\
+            ');
+        }else{
+            $('#data').html('\
+            <table>\
+                <tr>\
+                    <th>Name</th>\
+                    <td>'+ name +'</td>\
+                </tr>\
+            </table>\
+            ');
+        }
+    };
+    function aprvrej(key, pr_id, status){
+        console.log(key, pr_id);
+        $.ajax({
+            url:'/admin/previlege',
+            type: 'POST',
+            data: {
+                key:key,
+                pr_id:pr_id,
+                status:status
+            },
+            success: function (response, statusText, xhr) {
+                if (xhr.status == 200) {
+                    //success case
+                }else{
+                    //error case
+                }
+            }
+        });
     }
 </script>

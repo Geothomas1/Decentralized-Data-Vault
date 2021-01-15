@@ -9,8 +9,8 @@ router.get('/home', (req, res) => res.render('admin/home', { username: req.sessi
 
 router.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/admin/login'); });
 
-router.get('/verify', admin.viewInsts)
-router.get('/verifyList', (req, res) => res.render('admin/verifyList', { username: req.session.username }));
+router.get('/previlege', admin.viewInsts)
+router.post('/previlege', admin.acceptOrRejectPrevilege);
 
 
 module.exports = router;
