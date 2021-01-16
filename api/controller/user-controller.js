@@ -112,8 +112,10 @@ exports.login = async(req, res) => {
 
 exports.addData = async(req, res) => {
     console.log('In user addData', req.body);
+    var date = new Date();
+    console.log(date)
     if (req.body) {
-        var args = [req.user._id, req.user.username, req.body.email, req.body.phone];
+        var args = [req.user._id, req.user.username, req.body.email, req.body.phone, date];
         let result = await operator.createAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'createUser', args);
         console.log('result :', result);
         if (result.status == 1) {
@@ -143,9 +145,9 @@ exports.viewData = async(req, res) => {
 exports.viewHistory = async(req, res) => {
     console.log('In user viewHistory', req.user);
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryUserHistory', [req.user._id]);
-    console.log('result :', result);
+    console.log('result :', result.result);
     if (result.status == 1) {
-
+        res.render('user/viewHistory', { username: req.session.user.username, history: result.result });
     } else {
         console.log(result.msg);
         return res.status(500).json({ status: 0, msg: result.msg });

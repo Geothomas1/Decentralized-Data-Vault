@@ -57,7 +57,7 @@ class Institution extends Contract {
             await ctx.stub.putState(instns[i].key, Buffer.from(JSON.stringify(instns[i].data)));
             console.info('Added <--> ', instns[i]);
         }
-        console.info('============= END : Initialize Ledger Key ===========');
+        console.info('============= END : Initialize Ledger ===========');
     };
 
     async createInstn(ctx, key, name, code, type, address, district, state, pincode, phone, email, owner, status) {

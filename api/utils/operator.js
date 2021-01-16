@@ -101,7 +101,7 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
             const contract = network.getContract(chaincode);
             switch (fcn) {
                 case 'createUser':
-                    var result1 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3]);
+                    var result1 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4]);
                     await gateway.disconnect();
                     return {
                         status: 1,
