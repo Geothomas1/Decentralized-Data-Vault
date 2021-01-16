@@ -238,13 +238,23 @@ const updateAsset = async(orgname, username, channel, chaincode, fcn, args) => {
             const network = await gateway.getNetwork(channel);
             const contract = network.getContract(chaincode);
             switch (fcn) {
-                case 'addPrevilege':
+
+                case 'addInstnPrevilege':
                     var result1 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3]);
                     await gateway.disconnect();
                     return {
                         status: 1,
                         msg: `Previlege added successfully`,
                         value: result1
+                    };
+
+                case 'updateInstnPrevilege':
+                    var result2 = await contract.submitTransaction(fcn, args[0], args[1], args[2]);
+                    await gateway.disconnect();
+                    return {
+                        status: 1,
+                        msg: `Previlege updated successfully`,
+                        value: result2
                     };
 
                 default:
@@ -254,6 +264,7 @@ const updateAsset = async(orgname, username, channel, chaincode, fcn, args) => {
                         status: -1,
                         msg: `fcn ${fcn} not found`
                     };
+
             }
         } catch (error) {
             console.log(`Getting error: ${error}`);

@@ -13,7 +13,7 @@ class Institution extends Contract {
     async initLedger(ctx) {
         console.info('============= START : Initialize Ledger ===========');
         const instns = [{
-                _id: '5ffd7158e71ab969f7cabfef',
+                key: '5ffd7158e71ab969f7cabfef',
                 data: {
                     name: 'Mahathma Gandhi University',
                     code: 'MGU',
@@ -34,7 +34,7 @@ class Institution extends Contract {
                 }
             },
             {
-                _id: '5ffd734bcc5dfa3b4e888282',
+                key: '5ffd734bcc5dfa3b4e888282',
                 data: {
                     name: 'Lovely Professional University',
                     code: 'LPU',
@@ -54,14 +54,14 @@ class Institution extends Contract {
 
         for (let i = 0; i < instns.length; i++) {
             instns[i].data.docType = 'institution';
-            await ctx.stub.putState(instns[i]._id, Buffer.from(JSON.stringify(instns[i].data)));
+            await ctx.stub.putState(instns[i].key, Buffer.from(JSON.stringify(instns[i].data)));
             console.info('Added <--> ', instns[i]);
         }
         console.info('============= END : Initialize Ledger Key ===========');
     };
 
-    async createInstn(ctx, _id, name, code, type, address, district, state, pincode, phone, email, owner, status) {
-        console.info('============= START : Create Instns ===========');
+    async createInstn(ctx, key, name, code, type, address, district, state, pincode, phone, email, owner, status) {
+        console.info('============= START : Create Institutions ===========');
         const user = {
             name,
             code,
@@ -77,24 +77,24 @@ class Institution extends Contract {
             privileges: [],
             docType: 'institution',
         };
-
-        await ctx.stub.putState(_id, Buffer.from(JSON.stringify(user)));
+        await ctx.stub.putState(key, Buffer.from(JSON.stringify(user)));
         let txt_id = ctx.stub.getTxID();
+        console.info('============= END : Create Institutions ===========');
         return JSON.stringify(txt_id);
-        console.info('============= END : Create Instns Success ===========');
     };
 
-    async queryInstn(ctx, _id) {
-        console.info('============= START : querInstn ===========');
-        const instnAsBytes = await ctx.stub.getState(_id);
+    async queryInstn(ctx, key) {
+        console.info('============= START : Query Institutions ===========');
+        const instnAsBytes = await ctx.stub.getState(key);
         if (!instnAsBytes || instnAsBytes.length === 0) {
-            throw new Error(`${_id} does not exist`);
+            throw new Error(`${key} does not exist`);
         }
-        console.info('============= END : querInstn ===========');
+        console.info('============= END : Query Institutions ===========');
         return instnAsBytes.toString();
     };
 
     async queryAllInstn(ctx) {
+        console.info('============= START : Query All Institutions ===========');
         const startKey = '';
         const endKey = '';
         const allResults = [];
@@ -111,14 +111,15 @@ class Institution extends Contract {
             allResults.push({ Key: key, Record: record });
         }
         console.info(allResults);
+        console.info('============= END : Query All Institutions ===========');
         return JSON.stringify(allResults);
     };
 
-    async addPrevilege(ctx, _id, prvlgId, prvlgName, prvlgStatus) {
-        console.info('============= START : addPrevilege ===========');
-        const instnAsBytes = await ctx.stub.getState(_id);
+    async addInstnPrevilege(ctx, key, prvlgId, prvlgName, prvlgStatus) {
+        console.info('============= START : Add Previlege ===========');
+        const instnAsBytes = await ctx.stub.getState(key);
         if (!instnAsBytes || instnAsBytes.length === 0) {
-            throw new Error(`${_id} does not exist`);
+            throw new Error(`${key} does not exist`);
         }
         const instn = JSON.parse(instnAsBytes.toString());
         instn.privileges.push({
@@ -126,22 +127,36 @@ class Institution extends Contract {
             name: prvlgName,
             status: prvlgStatus,
         });
-        await ctx.stub.putState(_id, Buffer.from(JSON.stringify(instn)));
-        console.info('============= END : addPrevilege ===========');
+        await ctx.stub.putState(key, Buffer.from(JSON.stringify(instn)));
+        console.info('============= END : Add Previlege ===========');
     };
 
-    async changeInstStatus(ctx, InstnNumber, status) {
-        console.info('============= changeInstStatusSTART : change Status ===========');
-
-        const InstnAsBytes = await ctx.stub.getState(InstnNumber); // get the car from chaincode state
+    async updateInstnStatus(ctx, key, status) {
+        console.info('============= START : Update Institution Status ===========');
+        const InstnAsBytes = await ctx.stub.getState(key);
         if (!InstnAsBytes || InstnAsBytes.length === 0) {
-            throw new Error(`${InstnNumber} does not exist`);
+            throw new Error(`${key} does not exist`);
         }
         const instn = JSON.parse(InstnAsBytes.toString());
         instn.status = status;
+        await ctx.stub.putState(key, Buffer.from(JSON.stringify(instn)));
+        console.info('============= END : Update Institution Status ===========');
+    };
 
-        await ctx.stub.putState(InstnNumber, Buffer.from(JSON.stringify(instn)));
-        console.info('============= END : change Status ===========');
+    async updateInstnPrevilege(ctx, key, prvlgId, prvlgStatus){
+        console.info('============= START : Update Previlege ===========');
+        const InstnAsBytes = await ctx.stub.getState(key);
+        if (!InstnAsBytes || InstnAsBytes.length === 0) {
+            throw new Error(`${key} does not exist`);
+        }
+        const instn = JSON.parse(InstnAsBytes.toString());
+        instn.privileges.forEach(item => {
+            if(item._id == prvlgId){
+                item.status = prvlgStatus;
+            }
+        });
+        await ctx.stub.putState(key, Buffer.from(JSON.stringify(instn)));
+        console.info('============= END : Update Previlege ===========');
     };
 
 }

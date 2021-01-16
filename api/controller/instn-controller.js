@@ -180,7 +180,7 @@ exports.showPrivilege = async(req, res) => {
 exports.requestPrivilege = async(req, res) => {
     console.log('In institution requestPrivilege', req.body);
     if (req.body.desc) {
-        let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'addPrevilege', [req.user._id, makeid(5), req.body.desc, 0]);
+        let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'addInstnPrevilege', [req.user._id, makeid(5), req.body.desc, 0]);
         console.log('result :', result);
         if (result.status == 1) {
             res.redirect('/instn/home');

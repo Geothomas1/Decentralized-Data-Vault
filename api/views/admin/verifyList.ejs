@@ -17,7 +17,7 @@
     <div id="data">
         <section>
             <% for(var i=0; i < data.length; i++){ %>
-                <% if (data[i].Record.privileges.length!=0) { %>
+                <% if (data[i].Record.privileges.length > 0) { %>
                     <% for(var j=0; j < data[i].Record.privileges.length; j++){ %>
                         <% if (data[i].Record.privileges[j].status==0) { %>
                             <div class="container mt-5">
@@ -70,7 +70,7 @@
     };
     function approve(key, name, code, address, district, state, pin, phone, email, owner, status, pr_id, prname, prstatus){
         console.log(key, name, code, address, district, state, pin, phone, email, owner, status, pr_id, prname, prstatus);
-        if(status == 0){
+        // if(status == 0){
             $('#data').html('\
             <table>\
                 <tr>\
@@ -109,16 +109,16 @@
             <a class="btn btn-success" onclick="aprvrej(\''+key+'\', \''+pr_id+'\', 1)">Accept</a>\
             <a class="btn btn-danger" onclick="aprvrej(\''+ key + '\', \''+ pr_id + '\', -1)">Reject</a>\
             ');
-        }else{
-            $('#data').html('\
-            <table>\
-                <tr>\
-                    <th>Name</th>\
-                    <td>'+ name +'</td>\
-                </tr>\
-            </table>\
-            ');
-        }
+        // }else{
+        //     $('#data').html('\
+        //     <table>\
+        //         <tr>\
+        //             <th>Name</th>\
+        //             <td>'+ name +'</td>\
+        //         </tr>\
+        //     </table>\
+        //     ');
+        // }
     };
     function aprvrej(key, pr_id, status){
         console.log(key, pr_id);
@@ -132,10 +132,15 @@
             },
             success: function (response, statusText, xhr) {
                 if (xhr.status == 200) {
+                    console.log(response, statusText, xhr)
                     //success case
                 }else{
+                    console.log('failed');
                     //error case
                 }
+            },
+            error: function (error) {
+                console.log(error);                
             }
         });
     }

@@ -36,9 +36,10 @@ exports.viewInsts = async(req, res) => {
 exports.acceptOrRejectPrevilege = async (req, res) => {
     console.log('In admin acceptPrevilege', req.body);
     if(req.body.key && req.body.pr_id && req.body.status){
-        let result = await operator.updateAsset('Org2', 'admin', 'mychannel', 'institution', 'setPrevilege', [req.body.key, req.body.pr_id, req.body.status]);
+        let result = await operator.updateAsset('Org2', 'admin', 'mychannel', 'institution', 'updateInstnPrevilege', [req.body.key, req.body.pr_id, req.body.status]);
+        console.log('result :', result);
         if (result.status == 1) {
-
+            
         } else {
             console.log(result.msg);
             return res.status(500).json({ status: 0, msg: result.msg });
