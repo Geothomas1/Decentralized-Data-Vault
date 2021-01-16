@@ -18,6 +18,7 @@ class User extends Contract {
                 username: 'User0',
                 email: 'user0@gmail.com',
                 phone: '9999999990',
+                date: '21-10-2020',
             }
         }, {
             _id: '5ffec1685eb00973ce6ce819',
@@ -25,6 +26,7 @@ class User extends Contract {
                 username: 'User1',
                 email: 'user1@gmail.com',
                 phone: '9999999991',
+                date: '21-10-2020',
             }
         }, ];
 
@@ -47,12 +49,13 @@ class User extends Contract {
         return userAsBytes.toString();
     }
 
-    async createUser(ctx, _id, username, email, phone) {
+    async createUser(ctx, _id, username, email, phone, date) {
         console.info('============= START : Create User ===========');
         const user = {
             username,
             email,
             phone,
+            date,
             docType: 'user',
         };
         await ctx.stub.putState(_id, Buffer.from(JSON.stringify(user)));
