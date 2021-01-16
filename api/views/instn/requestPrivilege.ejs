@@ -57,6 +57,24 @@
                                 </div>
                                 <% } %>
 
+                                    <% if(track==2) {%>
+                                        <p class="lead"><b><%= data.name %></b><br>
+                                            <% if (data.privileges.length==1) { %>
+
+                                                <% } else { %>
+                                                    <% for(var i=0; i < data.privileges.length; i ++){%>
+                                                        <div class="alert alert-info" role="alert">
+                                                            <%= data.privileges[i].name %> Approved
+                                                        </div>
+                                                        <% }%>
+                                                            <% } %>
+                                        </p>
+                                        <hr class="my-4">
+                                        <div id="frm">
+                                            <button class="btn btn-success btn-lg">Approved</button>
+                                        </div>
+                                        <% } %>
+
 
                 </div>
 

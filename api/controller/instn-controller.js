@@ -165,11 +165,18 @@ exports.showPrivilege = async(req, res) => {
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'queryInstn', [req.user._id]);
     console.log('result :', result);
     console.log('result.result.privileges.length', result.result.privileges.length)
+        //console.log('result.result.privileges.status', result.result.privileges[0].status)
     if (result.status == 1 && result.result.privileges.length == 0) {
+        console.log('Prev is empty')
         res.render('instn/requestPrivilege', { username: req.session.user.username, data: result.result, track: 0 })
-    } else if (result.status == 1 && result.result.privileges.length != 0) {
+    } else if (result.status == 1 && result.result.privileges[0].status == 0) {
         console.log('Prev is not empty')
         res.render('instn/requestPrivilege', { username: req.session.user.username, data: result.result, track: 1 })
+
+    }
+    if (result.status == 1 && result.result.privileges[0].status == 1) {
+        console.log('Prev is not empty')
+        res.render('instn/requestPrivilege', { username: req.session.user.username, data: result.result, track: 2 })
 
     } else {
         console.log(result.msg);
