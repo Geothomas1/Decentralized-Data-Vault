@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Data Vault</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/javascripts/script.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+</head>
+<header>
+    <%- include('../partials/user-Homeheader'); %>
+</header>
+
+<body>
+
+    <section>
+        <div class="row">
+            <div class="col-md-6 m-auto">
+                <div class="container mt-5 pl-5">
+                    <div class="jumbotron">
+                        <h1>Asset Data History</h1>
+                        <hr class="my-4">
+                        <div class="alert alert-success" role="alert">
+                            <%= history[0].txid%>
+                        </div>
+                        <% for(var i=0; i < history.length; i++){ %>
+
+
+                            <div class="alert alert-primary" role="alert">
+
+                                <%= history[i].data%>
+                            </div>
+                            <% } %>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>
+
+<script>
+    function valForm() {
+        console.log("Validating Form");
+        return true;
+    }
+</script>

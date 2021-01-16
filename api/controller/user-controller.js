@@ -143,9 +143,9 @@ exports.viewData = async(req, res) => {
 exports.viewHistory = async(req, res) => {
     console.log('In user viewHistory', req.user);
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryUserHistory', [req.user._id]);
-    console.log('result :', result);
+    console.log('result :', result.result);
     if (result.status == 1) {
-
+        res.render('user/viewHistory', { username: req.session.user.username, history: result.result });
     } else {
         console.log(result.msg);
         return res.status(500).json({ status: 0, msg: result.msg });

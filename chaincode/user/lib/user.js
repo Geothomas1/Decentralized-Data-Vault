@@ -65,8 +65,8 @@ class User extends Contract {
         const results = [];
         for await (const keyMod of promiseOfIterator) {
             const resp = {
-                timestamp: keyMod.timestamp,
-                txid: keyMod.tx_id
+                timestamp: ctx.stub.getTxTimestamp(_id),
+                txid: ctx.stub.getTxID(_id)
             }
             if (keyMod.is_delete) {
                 resp.data = 'KEY DELETED';
