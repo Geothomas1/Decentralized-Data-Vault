@@ -159,6 +159,6 @@ class Institution extends Contract {
         console.info('============= END : Update Previlege ===========');
     };
 
-}
+};
 
 module.exports = Institution;

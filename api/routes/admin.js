@@ -14,7 +14,9 @@ router.get('/logout', (req, res) => {
 
 router.get('/previlege', admin.viewInsts)
 router.post('/previlege', admin.acceptOrRejectPrevilege);
-router.get('/approvedList', admin.approvedList)
+
+router.post('/verifyinstn', admin.verifyInstitution);
+router.get('/approvedList', admin.approvedList);
 
 
 module.exports = router;

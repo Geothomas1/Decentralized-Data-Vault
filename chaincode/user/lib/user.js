@@ -13,63 +13,81 @@ class User extends Contract {
     async initLedger(ctx) {
         console.info('============= START : Initialize Ledger ===========');
         const users = [{
-            _id: '5ffea850821d59360f7bfcc5',
+            key: '5ffea850821d59360f7bfcc5',
             data: {
-                username: 'User0',
+                name: 'User0',
+                address: 'Palamattom P.O',
+                city: 'Kothamangalam',
+                district: 'Ernakulam',
+                state: 'Kerala',
                 email: 'user0@gmail.com',
                 phone: '9999999990',
-                date: '21-10-2020',
+                dob: '21-10-2020',
+                status: 0,
+                applications: [],
             }
         }, {
-            _id: '5ffec1685eb00973ce6ce819',
+            key: '5ffec1685eb00973ce6ce819',
             data: {
-                username: 'User1',
+                name: 'User1',
+                address: 'Palamattom P.O',
+                city: 'Kothamangalam',
+                district: 'Ernakulam',
+                state: 'Kerala',
                 email: 'user1@gmail.com',
                 phone: '9999999991',
-                date: '21-10-2020',
+                dob: '21-10-2020',
+                status: 0,
+                applications: [],
             }
-        }, ];
-
+        },];
         for (let i = 0; i < users.length; i++) {
             users[i].data.docType = 'user';
-            await ctx.stub.putState(users[i]._id, Buffer.from(JSON.stringify(users[i].data)));
+            await ctx.stub.putState(users[i].key, Buffer.from(JSON.stringify(users[i].data)));
             console.info('Added <--> ', users[i]);
         }
         console.info('============= END : Initialize Ledger ===========');
-    }
+    };
 
-    async queryUser(ctx, _id) {
-        console.info('============= START : Query User ===========');
-        const userAsBytes = await ctx.stub.getState(_id);
-        if (!userAsBytes || userAsBytes.length === 0) {
-            throw new Error(`${_id} does not exist`);
-        }
-        console.log(userAsBytes.toString());
-        console.info('============= END : Query User Success ===========');
-        return userAsBytes.toString();
-    }
-
-    async createUser(ctx, _id, username, email, phone, date) {
+    async createUser(ctx, key, name, address, city, district, state, email, phone, dob, status) {
         console.info('============= START : Create User ===========');
         const user = {
-            username,
+            name,
+            address,
+            city,
+            district,
+            state,
             email,
             phone,
-            date,
+            dob,
+            status,
+            applications: [],
             docType: 'user',
         };
-        await ctx.stub.putState(_id, Buffer.from(JSON.stringify(user)));
-        console.info('============= END : Create User Success ===========');
-    }
+        await ctx.stub.putState(key, Buffer.from(JSON.stringify(user)));
+        console.info('============= END : Create User ===========');
+    };
 
-    async queryUserHistory(ctx, _id) {
+
+    async queryUser(ctx, key) {
+        console.info('============= START : Query User ===========');
+        const userAsBytes = await ctx.stub.getState(key);
+        if (!userAsBytes || userAsBytes.length === 0) {
+            throw new Error(`${key} does not exist`);
+        }
+        console.log(userAsBytes.toString());
+        console.info('============= END : Query User ===========');
+        return userAsBytes.toString();
+    };
+
+    async queryUserHistory(ctx, key) {
         console.info('============= START : Query User History ===========');
-        const promiseOfIterator = ctx.stub.getHistoryForKey(_id);
+        const promiseOfIterator = ctx.stub.getHistoryForKey(key);
         const results = [];
         for await (const keyMod of promiseOfIterator) {
             const resp = {
-                timestamp: ctx.stub.getTxTimestamp(_id),
-                txid: ctx.stub.getTxID(_id)
+                timestamp: ctx.stub.getTxTimestamp(key),
+                txid: ctx.stub.getTxID(key)
             }
             if (keyMod.is_delete) {
                 resp.data = 'KEY DELETED';
@@ -78,9 +96,25 @@ class User extends Contract {
             }
             results.push(resp);
         }
+        console.info('============= END : Query User History ===========');
         return results;
-    }
+    };
 
-}
+    async addUserApplication(ctx, key, aplnId, instId, aplnStatus) {
+        console.info('============= START : Add Application ===========');
+        const userAsBytes = await ctx.stub.getState(key);
+        if (!userAsBytes || userAsBytes.length === 0) {
+            throw new Error(`${key} does not exist`);
+        }
+        const user = JSON.parse(userAsBytes.toString());
+        user.applications.push({
+            _id: aplnId,
+            inst: instId,
+            status: aplnStatus,
+        });
+        await ctx.stub.putState(key, Buffer.from(JSON.stringify(user)));
+        console.info('============= END : Add Application ===========');
+    };
+};
 
 module.exports = User;

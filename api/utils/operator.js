@@ -3,7 +3,7 @@ const FabricCAServices = require('fabric-ca-client');
 const { Gateway, Wallets } = require('fabric-network');
 const helper = require('./helper');
 
-const enrollUser = async(orgname, username) => {
+const enrollUser = async (orgname, username) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
     const ca = new FabricCAServices(caURL);
@@ -79,7 +79,7 @@ const enrollUser = async(orgname, username) => {
     }
 };
 
-const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
+const createAsset = async (orgname, username, channel, chaincode, fcn, args) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
     const ca = new FabricCAServices(caURL);
@@ -100,8 +100,9 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
             const network = await gateway.getNetwork(channel);
             const contract = network.getContract(chaincode);
             switch (fcn) {
+
                 case 'createUser':
-                    var result1 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4]);
+                    var result1 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
                     await gateway.disconnect();
                     return {
                         status: 1,
@@ -117,15 +118,6 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
                         msg: `Asset added successfully`,
                         value: JSON.parse(Buffer.from(result2).toString('utf8'))
                     };
-                case 'changeInstStatus':
-                    var result2 = await contract.submitTransaction(fcn, args[0], args[1]);
-                    await gateway.disconnect();
-                    return {
-                        status: 1,
-                        msg: `status updated successfully`,
-                        value: result2
-                    };
-
 
                 default:
                     await gateway.disconnect();
@@ -134,6 +126,7 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
                         status: -1,
                         msg: `fcn ${fcn} not found`
                     };
+
             }
         } catch (error) {
             console.log(`Getting error: ${error}`);
@@ -151,7 +144,7 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
     }
 };
 
-const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
+const queryAsset = async (userorg, username, channel, chaincode, fcn, args) => {
     let ccp = await helper.getCCP(userorg);
     const caURL = await helper.getCaUrl(userorg, ccp);
     const ca = new FabricCAServices(caURL);
@@ -173,6 +166,7 @@ const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
             const network = await gateway.getNetwork(channel);
             const contract = network.getContract(chaincode);
             switch (fcn) {
+
                 case 'queryUser':
                 case 'queryUserHistory':
                 case 'queryInstn':
@@ -183,6 +177,7 @@ const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
                         msg: `Asset fetched successfully`,
                         result: JSON.parse(Buffer.from(result1).toString('utf8')),
                     };
+
                 case 'queryAllInstn':
                     let result2 = await contract.evaluateTransaction(fcn);
                     await gateway.disconnect();
@@ -192,7 +187,6 @@ const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
                         result: JSON.parse(Buffer.from(result2).toString('utf8')),
                     };
 
-
                 default:
                     await gateway.disconnect();
                     console.log(`Getting error: fcn ${fcn} not found`);
@@ -200,6 +194,7 @@ const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
                         status: -1,
                         msg: `fcn ${fcn} not found`
                     };
+
             }
         } catch (error) {
             console.log(`Getting error: ${error}`);
@@ -217,7 +212,7 @@ const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
     }
 };
 
-const updateAsset = async(orgname, username, channel, chaincode, fcn, args) => {
+const updateAsset = async (orgname, username, channel, chaincode, fcn, args) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
     const ca = new FabricCAServices(caURL);
@@ -257,6 +252,25 @@ const updateAsset = async(orgname, username, channel, chaincode, fcn, args) => {
                         value: result2
                     };
 
+                case 'updateInstnStatus':
+                    var result3 = await contract.submitTransaction(fcn, args[0], args[1]);
+                    await gateway.disconnect();
+                    return {
+                        status: 1,
+                        msg: `Status updated successfully`,
+                        value: result3
+                    };
+
+                case 'addUserApplication':
+                    var result4 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3]);
+                    await gateway.disconnect();
+                    return {
+                        status: 1,
+                        msg: `Application added successfully`,
+                        value: result4
+                    };
+
+
                 default:
                     await gateway.disconnect();
                     console.log(`Getting error: fcn ${fcn} not found`);
@@ -284,9 +298,9 @@ const updateAsset = async(orgname, username, channel, chaincode, fcn, args) => {
 
 
 module.exports = {
-    enrollUser: enrollUser,
-    createAsset: createAsset,
-    queryAsset: queryAsset,
+    enrollUser,
+    createAsset,
+    queryAsset,
     updateAsset,
-    updateAsset,
+
 };

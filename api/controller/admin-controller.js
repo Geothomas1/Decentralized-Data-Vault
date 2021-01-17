@@ -1,7 +1,7 @@
 'use strict';
 const operator = require('../utils/operator');
 
-exports.login = async(req, res) => {
+exports.login = async (req, res) => {
     console.log('In admin login', req.body);
     if (req.body.username && req.body.password) {
         if (req.body.username == 'admin' && req.body.password == 'admin') {
@@ -21,7 +21,7 @@ exports.login = async(req, res) => {
     }
 };
 
-exports.viewInsts = async(req, res) => {
+exports.viewInsts = async (req, res) => {
     console.log('In admin viewInsts', req.body);
     let result = await operator.queryAsset('Org2', 'admin', 'mychannel', 'institution', 'queryAllInstn', [0]);
     console.log('result :', result.result);
@@ -33,13 +33,13 @@ exports.viewInsts = async(req, res) => {
     }
 };
 
-exports.acceptOrRejectPrevilege = async(req, res) => {
-    console.log('In admin acceptPrevilege', req.body);
+exports.acceptOrRejectPrevilege = async (req, res) => {
+    console.log('In admin acceptOrRejectPrevilege', req.body);
     if (req.body.key && req.body.pr_id && req.body.status) {
         let result = await operator.updateAsset('Org2', 'admin', 'mychannel', 'institution', 'updateInstnPrevilege', [req.body.key, req.body.pr_id, req.body.status]);
         console.log('result :', result);
         if (result.status == 1) {
-
+            //previlege granted result
         } else {
             console.log(result.msg);
             return res.status(500).json({ status: 0, msg: result.msg });
@@ -50,7 +50,24 @@ exports.acceptOrRejectPrevilege = async(req, res) => {
     }
 };
 
-exports.approvedList = async(req, res) => {
+exports.verifyInstitution = async (req, res) => {
+    console.log('In admin verifyInstitution', req.body);
+    if (req.body.key && req.body.status) {
+        let result = await operator.updateAsset('Org2', 'admin', 'mychannel', 'institution', 'updateInstnStatus', [req.body.key, req.body.status]);
+        console.log('result :', result);
+        if (result.status == 1) {
+            return res.status(200).json({ status: 1, msg: result.msg });
+        } else {
+            console.log(result.msg);
+            return res.status(500).json({ status: 0, msg: result.msg });
+        }
+    } else {
+        console.log('Invalid format');
+        return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
+    }
+};
+
+exports.approvedList = async (req, res) => {
     console.log('Approved List of Institutions');
     let result = await operator.queryAsset('Org2', 'admin', 'mychannel', 'institution', 'queryAllInstn', [0]);
     console.log('result :', result.result);
@@ -60,5 +77,4 @@ exports.approvedList = async(req, res) => {
         console.log(result.msg);
         return res.status(500).json({ status: 0, msg: result.msg });
     }
-
 }

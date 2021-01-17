@@ -3,6 +3,16 @@ const operator = require('../utils/operator');
 
 const User = require('../models/user-schema');
 
+const makeid = (length) => {
+    var result = '';
+    var characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+};
+
 exports.checkUser = (req, res, next) => {
     console.log('In checkUser', req.session);
     User.findOne({ _id: req.session.user._id }, (err, usr) => {
@@ -21,7 +31,7 @@ exports.checkUser = (req, res, next) => {
     });
 };
 
-exports.register = async(req, res) => {
+exports.register = async (req, res) => {
     console.log('In user register', req.body);
     if (req.body.orgname && req.body.username && req.body.password) {
         let result = await operator.enrollUser(req.body.orgname, req.body.username);
@@ -58,7 +68,7 @@ exports.register = async(req, res) => {
     }
 };
 
-exports.login = async(req, res) => {
+exports.login = async (req, res) => {
     console.log('In user login', req.body);
     if (req.body.username && req.body.password) {
         User.findOne({ username: req.body.username }, (err, usr) => {
@@ -110,13 +120,21 @@ exports.login = async(req, res) => {
     }
 };
 
-exports.addData = async(req, res) => {
+exports.addData = async (req, res) => {
     console.log('In user addData', req.body);
-    var date = new Date();
-    console.log(date)
-    if (req.body) {
-        var args = [req.user._id, req.user.username, req.body.email, req.body.phone, date];
-        let result = await operator.createAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'createUser', args);
+    if (req.body.name && req.body.address && req.body.city && req.body.district && req.body.state && req.body.email && req.body.phone && req.body.dob) {
+        let result = await operator.createAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'createUser', [
+            req.user._id,
+            req.body.name,
+            req.body.address,
+            req.body.city,
+            req.body.district,
+            req.body.state,
+            req.body.email,
+            req.body.phone,
+            req.body.dob,
+            0
+        ]);
         console.log('result :', result);
         if (result.status == 1) {
             res.redirect('/user/home');
@@ -130,7 +148,7 @@ exports.addData = async(req, res) => {
     }
 };
 
-exports.viewData = async(req, res) => {
+exports.viewData = async (req, res) => {
     console.log('In user viewData');
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryUser', [req.user._id]);
     console.log('result :', result);
@@ -142,7 +160,7 @@ exports.viewData = async(req, res) => {
     }
 };
 
-exports.viewHistory = async(req, res) => {
+exports.viewHistory = async (req, res) => {
     console.log('In user viewHistory', req.user);
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryUserHistory', [req.user._id]);
     console.log('result :', result.result);
@@ -154,9 +172,9 @@ exports.viewHistory = async(req, res) => {
     }
 };
 
-exports.showInstitutions = async(req, res) => {
-    console.log('Show Verifiyed Institutions')
-    let result = await operator.queryAsset('Org2', 'admin', 'mychannel', 'institution', 'queryAllInstn', [0]);
+exports.showInstitutions = async (req, res) => {
+    console.log('In user showInstitutions');
+    let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'queryAllInstn', [0]);
     console.log('result :', result.result);
     if (result.status == 1) {
         res.render('user/serviceList', { username: req.session.user.username, data: result.result });
@@ -164,5 +182,21 @@ exports.showInstitutions = async(req, res) => {
         console.log(result.msg);
         return res.status(500).json({ status: 0, msg: result.msg });
     }
+};
 
-}
+exports.applyService = async (req, res) => {
+    console.log('In user applyService', req.body);
+    if (req.body.key) {
+        let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'addUserApplication', [req.user._id, makeid(6), req.body.key, 0]);
+        console.log('result :', result);
+        if (result.status == 1) {
+            return res.status(200).json({ status: 1, msg: result.msg });
+        } else {
+            console.log(result.msg);
+            return res.status(500).json({ status: 0, msg: result.msg });
+        }
+    } else {
+        console.log('Invalid format');
+        return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
+    }
+};
