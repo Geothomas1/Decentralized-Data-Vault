@@ -22,5 +22,6 @@ router.get('/privileges', instn.checkInstn, instn.showPrivilege);
 
 
 router.post('/requestPrivilege', instn.checkInstn, instn.requestPrivilege);
-
+router.get('/viewApplication', instn.checkInstn, instn.viewApplication)
+router.get('/approvedList', instn.checkInstn, instn.approvedList);
 module.exports = router;

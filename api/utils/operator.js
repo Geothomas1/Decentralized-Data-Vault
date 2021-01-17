@@ -3,7 +3,7 @@ const FabricCAServices = require('fabric-ca-client');
 const { Gateway, Wallets } = require('fabric-network');
 const helper = require('./helper');
 
-const enrollUser = async (orgname, username) => {
+const enrollUser = async(orgname, username) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
     const ca = new FabricCAServices(caURL);
@@ -79,7 +79,7 @@ const enrollUser = async (orgname, username) => {
     }
 };
 
-const createAsset = async (orgname, username, channel, chaincode, fcn, args) => {
+const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
     const ca = new FabricCAServices(caURL);
@@ -144,7 +144,7 @@ const createAsset = async (orgname, username, channel, chaincode, fcn, args) => 
     }
 };
 
-const queryAsset = async (userorg, username, channel, chaincode, fcn, args) => {
+const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
     let ccp = await helper.getCCP(userorg);
     const caURL = await helper.getCaUrl(userorg, ccp);
     const ca = new FabricCAServices(caURL);
@@ -179,6 +179,7 @@ const queryAsset = async (userorg, username, channel, chaincode, fcn, args) => {
                     };
 
                 case 'queryAllInstn':
+                case 'queryAllUser':
                     let result2 = await contract.evaluateTransaction(fcn);
                     await gateway.disconnect();
                     return {
@@ -212,7 +213,7 @@ const queryAsset = async (userorg, username, channel, chaincode, fcn, args) => {
     }
 };
 
-const updateAsset = async (orgname, username, channel, chaincode, fcn, args) => {
+const updateAsset = async(orgname, username, channel, chaincode, fcn, args) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
     const ca = new FabricCAServices(caURL);

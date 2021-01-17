@@ -40,7 +40,7 @@ class User extends Contract {
                 status: 0,
                 applications: [],
             }
-        },];
+        }, ];
         for (let i = 0; i < users.length; i++) {
             users[i].data.docType = 'user';
             await ctx.stub.putState(users[i].key, Buffer.from(JSON.stringify(users[i].data)));
@@ -114,6 +114,27 @@ class User extends Contract {
         });
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(user)));
         console.info('============= END : Add Application ===========');
+    };
+    async queryAllUser(ctx) {
+        console.info('============= START : Query All User ===========');
+        const startKey = '';
+        const endKey = '';
+        const allResults = [];
+        for await (const { key, value }
+            of ctx.stub.getStateByRange(startKey, endKey)) {
+            const strValue = Buffer.from(value).toString('utf8');
+            let record;
+            try {
+                record = JSON.parse(strValue);
+            } catch (err) {
+                console.log(err);
+                record = strValue;
+            }
+            allResults.push({ Key: key, Record: record });
+        }
+        console.info(allResults);
+        console.info('============= END : Query All User ===========');
+        return JSON.stringify(allResults);
     };
 };
 

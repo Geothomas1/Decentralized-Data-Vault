@@ -200,3 +200,61 @@ exports.requestPrivilege = async(req, res) => {
         return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
     }
 }
+exports.acceptOrRejectPrevilege = async(req, res) => {
+    console.log('In admin acceptOrRejectPrevilege', req.body);
+    if (req.body.key && req.body.pr_id && req.body.status) {
+        let result = await operator.updateAsset('Org2', 'admin', 'mychannel', 'institution', 'updateInstnPrevilege', [req.body.key, req.body.pr_id, req.body.status]);
+        console.log('result :', result);
+        if (result.status == 1) {
+            //previlege granted result
+        } else {
+            console.log(result.msg);
+            return res.status(500).json({ status: 0, msg: result.msg });
+        }
+    } else {
+        console.log('Invalid format');
+        return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
+    }
+};
+exports.verifyInstitution = async(req, res) => {
+    console.log('In admin verifyInstitution', req.body);
+    if (req.body.key && req.body.status) {
+        let result = await operator.updateAsset('Org2', 'admin', 'mychannel', 'institution', 'updateInstnStatus', [req.body.key, req.body.status]);
+        console.log('result :', result);
+        if (result.status == 1) {
+            return res.status(200).json({ status: 1, msg: result.msg });
+        } else {
+            console.log(result.msg);
+            return res.status(500).json({ status: 0, msg: result.msg });
+        }
+    } else {
+        console.log('Invalid format');
+        return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
+    }
+};
+exports.viewApplication = async(req, res) => {
+
+    console.log("View Application")
+
+    let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryAllUser', [0]);
+    console.log('result :', result.result);
+    if (result.status == 1) {
+        res.render('instn/verifyList', { username: req.session.user.username, data: result.result });
+    } else {
+        console.log(result.msg);
+        return res.status(500).json({ status: 0, msg: result.msg });
+    }
+
+}
+
+exports.approvedList = async(req, res) => {
+    console.log('Approved List of User');
+    let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryAllUser', [0]);
+    console.log('result :', result.result);
+    if (result.status == 1) {
+        res.render('instn/approvedList', { username: req.session.user.username, data: result.result });
+    } else {
+        console.log(result.msg);
+        return res.status(500).json({ status: 0, msg: result.msg });
+    }
+}
