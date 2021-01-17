@@ -24,4 +24,8 @@ router.post('/addData', user.checkUser, user.addData);
 router.get('/getHistory', (req, res) => res.render('user/getHistory', { username: req.session.user.username }));
 router.get('/viewHistory', user.checkUser, user.viewHistory);
 
+router.get('/serviceList', user.checkUser, user.showInstitutions)
+
+
+
 module.exports = router;

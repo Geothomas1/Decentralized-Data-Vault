@@ -153,3 +153,16 @@ exports.viewHistory = async(req, res) => {
         return res.status(500).json({ status: 0, msg: result.msg });
     }
 };
+
+exports.showInstitutions = async(req, res) => {
+    console.log('Show Verifiyed Institutions')
+    let result = await operator.queryAsset('Org2', 'admin', 'mychannel', 'institution', 'queryAllInstn', [0]);
+    console.log('result :', result.result);
+    if (result.status == 1) {
+        res.render('user/serviceList', { username: req.session.user.username, data: result.result });
+    } else {
+        console.log(result.msg);
+        return res.status(500).json({ status: 0, msg: result.msg });
+    }
+
+}
