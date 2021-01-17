@@ -32,14 +32,26 @@
                                             <p class="card-text">
                                                 <b><%= data[i].Record.owner %></b>
                                             </p>
-                                            <button type="button" class="btn btn-success" onclick="apply('<%= data[i].Key %>')">Apply</button>
+                                            <%if (status==-1){%>
+
+                                                <button type="button" class="btn btn-dark" onclick="apply('<%= data[i].Key %>')">Apply</button>
+                                                <% } %>
+                                                    <%if (status==0){%>
+
+                                                        <button type="button" class="btn btn-warning">Pending Verification</button>
+                                                        <% } %>
+                                                            <%if (status==1){%>
+
+                                                                <button type="button" class="btn btn-success">Approved</button>
+                                                                <% } %>
+
                                         </div>
                                     </div>
                                 </div>
-                            <% } %>
-                        <% } %>
-                    <% } %>
-                <% } %>
+                                <% } %>
+                                    <% } %>
+                                        <% } %>
+                                            <% } %>
             </div>
         </div>
     </section>
@@ -52,7 +64,8 @@
     function valForm() {
         console.log("Validating Form");
         return true;
-    }; 
+    };
+
     function apply(key) {
         console.log(key);
         $.ajax({
@@ -61,16 +74,16 @@
             data: {
                 key: key,
             },
-            success: function (response, statusText, xhr) {
+            success: function(response, statusText, xhr) {
                 if (xhr.status == 200) {
                     console.log(response, statusText, xhr)
-                    //success case
+                        //success case
                 } else {
                     console.log('failed');
                     //error case
                 }
             },
-            error: function (error) {
+            error: function(error) {
                 console.log(error);
             }
         });

@@ -31,7 +31,7 @@ exports.checkUser = (req, res, next) => {
     });
 };
 
-exports.register = async (req, res) => {
+exports.register = async(req, res) => {
     console.log('In user register', req.body);
     if (req.body.orgname && req.body.username && req.body.password) {
         let result = await operator.enrollUser(req.body.orgname, req.body.username);
@@ -68,7 +68,7 @@ exports.register = async (req, res) => {
     }
 };
 
-exports.login = async (req, res) => {
+exports.login = async(req, res) => {
     console.log('In user login', req.body);
     if (req.body.username && req.body.password) {
         User.findOne({ username: req.body.username }, (err, usr) => {
@@ -120,7 +120,7 @@ exports.login = async (req, res) => {
     }
 };
 
-exports.addData = async (req, res) => {
+exports.addData = async(req, res) => {
     console.log('In user addData', req.body);
     if (req.body.name && req.body.address && req.body.city && req.body.district && req.body.state && req.body.email && req.body.phone && req.body.dob) {
         let result = await operator.createAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'createUser', [
@@ -148,7 +148,7 @@ exports.addData = async (req, res) => {
     }
 };
 
-exports.viewData = async (req, res) => {
+exports.viewData = async(req, res) => {
     console.log('In user viewData');
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryUser', [req.user._id]);
     console.log('result :', result);
@@ -160,7 +160,7 @@ exports.viewData = async (req, res) => {
     }
 };
 
-exports.viewHistory = async (req, res) => {
+exports.viewHistory = async(req, res) => {
     console.log('In user viewHistory', req.user);
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryUserHistory', [req.user._id]);
     console.log('result :', result.result);
@@ -172,25 +172,40 @@ exports.viewHistory = async (req, res) => {
     }
 };
 
-exports.showInstitutions = async (req, res) => {
+exports.showInstitutions = async(req, res) => {
     console.log('In user showInstitutions');
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'queryAllInstn', [0]);
     console.log('result :', result.result);
-    if (result.status == 1) {
-        res.render('user/serviceList', { username: req.session.user.username, data: result.result });
+
+    console.log("Check Application already");
+    let result2 = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryUser', [req.user._id]);
+    console.log('result2 :', result2.result.applications.length);
+    var applicationsLen = result2.result.applications.length;
+    if (applicationsLen == 0) {
+        res.render('user/serviceList', { username: req.session.user.username, data: result.result, status: -1 });
     } else {
-        console.log(result.msg);
-        return res.status(500).json({ status: 0, msg: result.msg });
+
+        for (var i = 0; i < applicationsLen; i++) {
+            console.log('result :', result2.result.applications[i])
+            if (result2.result.applications[i].status == 0) {
+                res.render('user/serviceList', { username: req.session.user.username, data: result.result, status: 0 })
+            } else if (result2.result.applications[i].status == 1) {
+                res.render('user/serviceList', { username: req.session.user.username, data: result.result, status: 1 })
+            }
+        }
     }
+
+
 };
 
-exports.applyService = async (req, res) => {
+exports.applyService = async(req, res) => {
     console.log('In user applyService', req.body);
     if (req.body.key) {
+
         let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'addUserApplication', [req.user._id, makeid(6), req.body.key, 0]);
         console.log('result :', result);
         if (result.status == 1) {
-            return res.status(200).json({ status: 1, msg: result.msg });
+            res.render('user/home', { username: req.session.user.username })
         } else {
             console.log(result.msg);
             return res.status(500).json({ status: 0, msg: result.msg });
