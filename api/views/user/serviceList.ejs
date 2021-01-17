@@ -19,39 +19,71 @@
         <div class="container mt-5">
             <div class="row">
                 <% for(var i=0; i < data.length; i++){ %>
-                    <% if (data[i].Record.privileges.length > 0 && data[i].Record.status == 1) { %>
+                    <% if (data[i].Record.privileges.length > 0) { %>
                         <% for(var j=0; j < data[i].Record.privileges.length; j++){ %>
-                            <% if (data[i].Record.privileges[j].status == 1) { %>
-                                <div class="col-md-4 p-3">
-                                    <div style="width: 20rem;">
-                                        <img class="card-img-top" src="/images/application.png" alt="Enter data" style="width:100px;height:100px;">
-                                        <div class="card-body">
-                                            <h5 class="card-title">
-                                                <%= data[i].Record.name %>
-                                            </h5>
-                                            <p class="card-text">
-                                                <b><%= data[i].Record.owner %></b>
-                                            </p>
-                                            <%if (status==-1){%>
-
-                                                <button type="button" class="btn btn-dark" onclick="apply('<%= data[i].Key %>')">Apply</button>
-                                                <% } %>
-                                                    <%if (status==0){%>
-
-                                                        <button type="button" class="btn btn-warning">Pending Verification</button>
+                            <% if (data[i].Record.privileges[j].status==1) { %>
+                                <% if (status.length > 0) { %>
+                                    <% for(var k=0; k < status.length; k++){ %>
+                                        <% if (status[k].inst == data[i].Key) { %>
+                                            <div class="col-md-4 p-3">
+                                                <div style="width: 20rem;">
+                                                    <img class="card-img-top" src="/images/application.png" alt="Enter data" style="width:100px;height:100px;">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">
+                                                            <%= data[i].Record.name %>
+                                                        </h5>
+                                                        <p class="card-text">
+                                                            <b><%= data[i].Record.owner %></b>
+                                                        </p>
+                                                        <% if (status[k].status == 0) { %>
+                                                            <button type="button" class="btn btn-success">Pending</button>
                                                         <% } %>
-                                                            <%if (status==1){%>
-
-                                                                <button type="button" class="btn btn-success">Approved</button>
-                                                                <% } %>
-
+                                                        <% if (status[k].status == -1) { %>
+                                                            <button type="button" class="btn btn-success">Rejected</button>
+                                                        <% } %>
+                                                        <% if (status[k].status == 1) { %>
+                                                            <button type="button" class="btn btn-success">Approved</button>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% } else {%>
+                                            <div class="col-md-4 p-3">
+                                                <div style="width: 20rem;">
+                                                    <img class="card-img-top" src="/images/application.png" alt="Enter data" style="width:100px;height:100px;">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">
+                                                            <%= data[i].Record.name %>
+                                                        </h5>
+                                                        <p class="card-text">
+                                                            <b><%= data[i].Record.owner %></b>
+                                                        </p>
+                                                        <button type="button" class="btn btn-success" onclick="apply('<%= data[i].Key %>')">Apply</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    <% } %>
+                                <% } else {%>
+                                    <div class="col-md-4 p-3">
+                                        <div style="width: 20rem;">
+                                            <img class="card-img-top" src="/images/application.png" alt="Enter data" style="width:100px;height:100px;">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <%= data[i].Record.name %>
+                                                </h5>
+                                                <p class="card-text">
+                                                    <b><%= data[i].Record.owner %></b>
+                                                </p>
+                                                <button type="button" class="btn btn-success" onclick="apply('<%= data[i].Key %>')">Apply</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                 <% } %>
-                                    <% } %>
-                                        <% } %>
-                                            <% } %>
+                            <% } %>
+                        <% } %>
+                    <% } %>
+                <% } %>
             </div>
         </div>
     </section>
@@ -65,27 +97,26 @@
         console.log("Validating Form");
         return true;
     };
-
     function apply(key) {
         console.log(key);
-        $.ajax({
-            url: '/user/applyService',
-            type: 'POST',
-            data: {
-                key: key,
-            },
-            success: function(response, statusText, xhr) {
-                if (xhr.status == 200) {
-                    console.log(response, statusText, xhr)
-                        //success case
-                } else {
-                    console.log('failed');
-                    //error case
-                }
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
+        // $.ajax({
+        //     url: '/user/applyService',
+        //     type: 'POST',
+        //     data: {
+        //         key: key,
+        //     },
+        //     success: function (response, statusText, xhr) {
+        //         if (xhr.status == 200) {
+        //             console.log(response, statusText, xhr)
+        //             //success case
+        //         } else {
+        //             console.log('failed');
+        //             //error case
+        //         }
+        //     },
+        //     error: function (error) {
+        //         console.log(error);
+        //     }
+        // });
     }
 </script>

@@ -174,28 +174,13 @@ exports.viewHistory = async(req, res) => {
 
 exports.showInstitutions = async(req, res) => {
     console.log('In user showInstitutions');
-    let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'queryAllInstn', [0]);
-    console.log('result :', result.result);
+    let result1 = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'queryAllInstn', [0]);
+    console.log('result :', result1.result);
 
     console.log("Check Application already");
     let result2 = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryUser', [req.user._id]);
-    console.log('result2 :', result2.result.applications.length);
-    var applicationsLen = result2.result.applications.length;
-    if (applicationsLen == 0) {
-        res.render('user/serviceList', { username: req.session.user.username, data: result.result, status: -1 });
-    } else {
-
-        for (var i = 0; i < applicationsLen; i++) {
-            console.log('result :', result2.result.applications[i])
-            if (result2.result.applications[i].status == 0) {
-                res.render('user/serviceList', { username: req.session.user.username, data: result.result, status: 0 })
-            } else if (result2.result.applications[i].status == 1) {
-                res.render('user/serviceList', { username: req.session.user.username, data: result.result, status: 1 })
-            }
-        }
-    }
-
-
+    console.log('result2 :', result2.result.applications);
+    res.render('user/serviceList', { username: req.session.user.username, data: result1.result, status: result2.result.applications });
 };
 
 exports.applyService = async(req, res) => {
