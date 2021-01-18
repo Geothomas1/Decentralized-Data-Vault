@@ -36,7 +36,8 @@ exports.viewInsts = async (req, res) => {
 exports.acceptOrRejectPrevilege = async (req, res) => {
     console.log('In admin acceptOrRejectPrevilege', req.body);
     if (req.body.key && req.body.pr_id && req.body.status) {
-        let result = await operator.updateAsset('Org2', 'admin', 'mychannel', 'institution', 'updateInstnPrevilege', [req.body.key, req.body.pr_id, req.body.status]);
+        var d = new Date();
+        let result = await operator.updateAsset('Org2', 'admin', 'mychannel', 'institution', 'updateInstnPrevilege', [req.body.key, req.body.pr_id, req.body.status, d.toISOString()]);
         console.log('result :', result);
         if (result.status == 1) {
             //previlege granted result
@@ -53,7 +54,8 @@ exports.acceptOrRejectPrevilege = async (req, res) => {
 exports.verifyInstitution = async (req, res) => {
     console.log('In admin verifyInstitution', req.body);
     if (req.body.key && req.body.status) {
-        let result = await operator.updateAsset('Org2', 'admin', 'mychannel', 'institution', 'updateInstnStatus', [req.body.key, req.body.status]);
+        var d = new Date();
+        let result = await operator.updateAsset('Org2', 'admin', 'mychannel', 'institution', 'updateInstnStatus', [req.body.key, req.body.status, d.toISOString()]);
         console.log('result :', result);
         if (result.status == 1) {
             return res.status(200).json({ status: 1, msg: result.msg });

@@ -13,43 +13,45 @@ class Institution extends Contract {
     async initLedger(ctx) {
         console.info('============= START : Initialize Ledger ===========');
         const instns = [{
-                key: '5ffd7158e71ab969f7cabfef',
-                data: {
-                    name: 'Mahathma Gandhi University',
-                    code: 'MGU',
-                    type: 'University',
-                    address: 'Priyadarsini Hills',
-                    district: 'Kottayam',
-                    state: 'Kerala',
-                    pincode: '686560',
-                    phone: '+9104852554570',
-                    email: 'mgu@mgu.ac.in',
-                    owner: 'Government of Kerala',
-                    status: '0',
-                    privileges: [{
-                        _id: '11aaj',
-                        name: 'Provide qualification for the citizens',
-                        status: 0,
-                    }, ],
-                }
-            },
-            {
-                key: '5ffd734bcc5dfa3b4e888282',
-                data: {
-                    name: 'Lovely Professional University',
-                    code: 'LPU',
-                    type: 'University',
-                    address: 'Jalandhar - Delhi G.T. Road',
-                    district: 'Phagwara',
-                    state: 'Punjab',
-                    pincode: '144411',
-                    phone: '+911824517000',
-                    email: 'info@lpu.co.in',
-                    owner: 'Private',
-                    status: '0',
-                    privileges: [],
-                }
-            },
+            key: '5ffd7158e71ab969f7cabfef',
+            data: {
+                name: 'Mahathma Gandhi University',
+                code: 'MGU',
+                type: 'University',
+                address: 'Priyadarsini Hills',
+                district: 'Kottayam',
+                state: 'Kerala',
+                pincode: '686560',
+                phone: '+9104852554570',
+                email: 'mgu@mgu.ac.in',
+                owner: 'Government of Kerala',
+                status: '0',
+                privileges: [{
+                    _id: '11aaj',
+                    name: 'Provide qualification for the citizens',
+                    status: 0,
+                },],
+                date: "2021-01-18T14:02:58.846Z",
+            }
+        },
+        {
+            key: '5ffd734bcc5dfa3b4e888282',
+            data: {
+                name: 'Lovely Professional University',
+                code: 'LPU',
+                type: 'University',
+                address: 'Jalandhar - Delhi G.T. Road',
+                district: 'Phagwara',
+                state: 'Punjab',
+                pincode: '144411',
+                phone: '+911824517000',
+                email: 'info@lpu.co.in',
+                owner: 'Private',
+                status: '0',
+                privileges: [],
+                date: "2021-01-18T14:02:58.846Z",
+            }
+        },
         ];
 
         for (let i = 0; i < instns.length; i++) {
@@ -60,7 +62,7 @@ class Institution extends Contract {
         console.info('============= END : Initialize Ledger ===========');
     };
 
-    async createInstn(ctx, key, name, code, type, address, district, state, pincode, phone, email, owner, status) {
+    async createInstn(ctx, key, name, code, type, address, district, state, pincode, phone, email, owner, status, date) {
         console.info('============= START : Create Institutions ===========');
         const user = {
             name,
@@ -75,6 +77,7 @@ class Institution extends Contract {
             owner,
             status,
             privileges: [],
+            date:date,
             docType: 'institution',
         };
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(user)));
@@ -115,7 +118,7 @@ class Institution extends Contract {
         return JSON.stringify(allResults);
     };
 
-    async addInstnPrevilege(ctx, key, prvlgId, prvlgName, prvlgStatus) {
+    async addInstnPrevilege(ctx, key, prvlgId, prvlgName, prvlgStatus, date) {
         console.info('============= START : Add Previlege ===========');
         const instnAsBytes = await ctx.stub.getState(key);
         if (!instnAsBytes || instnAsBytes.length === 0) {
@@ -127,11 +130,12 @@ class Institution extends Contract {
             name: prvlgName,
             status: prvlgStatus,
         });
+        instn.date = date
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(instn)));
         console.info('============= END : Add Previlege ===========');
     };
 
-    async updateInstnStatus(ctx, key, status) {
+    async updateInstnStatus(ctx, key, status, date) {
         console.info('============= START : Update Institution Status ===========');
         const InstnAsBytes = await ctx.stub.getState(key);
         if (!InstnAsBytes || InstnAsBytes.length === 0) {
@@ -139,11 +143,12 @@ class Institution extends Contract {
         }
         const instn = JSON.parse(InstnAsBytes.toString());
         instn.status = status;
+        instn.date = date
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(instn)));
         console.info('============= END : Update Institution Status ===========');
     };
 
-    async updateInstnPrevilege(ctx, key, prvlgId, prvlgStatus){
+    async updateInstnPrevilege(ctx, key, prvlgId, prvlgStatus, date) {
         console.info('============= START : Update Previlege ===========');
         const InstnAsBytes = await ctx.stub.getState(key);
         if (!InstnAsBytes || InstnAsBytes.length === 0) {
@@ -151,10 +156,11 @@ class Institution extends Contract {
         }
         const instn = JSON.parse(InstnAsBytes.toString());
         instn.privileges.forEach(item => {
-            if(item._id == prvlgId){
+            if (item._id == prvlgId) {
                 item.status = prvlgStatus;
             }
         });
+        instn.date = date
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(instn)));
         console.info('============= END : Update Previlege ===========');
     };

@@ -31,7 +31,7 @@ exports.checkUser = (req, res, next) => {
     });
 };
 
-exports.register = async(req, res) => {
+exports.register = async (req, res) => {
     console.log('In user register', req.body);
     if (req.body.orgname && req.body.username && req.body.password) {
         let result = await operator.enrollUser(req.body.orgname, req.body.username);
@@ -54,7 +54,6 @@ exports.register = async(req, res) => {
                     req.session.loginErr = false;
                     return res.render('user/login', { status: 0, success: 1, loginErr: req.session.loginErr });
                     //return res.status(200).json({ status: 1, msg: req.body.username + ` enrolled and saved successfully` });
-
                 }
             });
         } else {
@@ -68,7 +67,7 @@ exports.register = async(req, res) => {
     }
 };
 
-exports.login = async(req, res) => {
+exports.login = async (req, res) => {
     console.log('In user login', req.body);
     if (req.body.username && req.body.password) {
         User.findOne({ username: req.body.username }, (err, usr) => {
@@ -91,7 +90,6 @@ exports.login = async(req, res) => {
                                     username: usr.username
                                 };
                                 console.log('session !!', req.session);
-
                                 req.session.save(err => {
                                     if (err) {
                                         console.log(err);
@@ -120,9 +118,10 @@ exports.login = async(req, res) => {
     }
 };
 
-exports.addData = async(req, res) => {
+exports.addData = async (req, res) => {
     console.log('In user addData', req.body);
     if (req.body.name && req.body.address && req.body.city && req.body.district && req.body.state && req.body.email && req.body.phone && req.body.dob) {
+        var d = new Date();
         let result = await operator.createAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'createUser', [
             req.user._id,
             req.body.name,
@@ -133,7 +132,8 @@ exports.addData = async(req, res) => {
             req.body.email,
             req.body.phone,
             req.body.dob,
-            0
+            0,
+            d.toISOString()
         ]);
         console.log('result :', result);
         if (result.status == 1) {
@@ -148,7 +148,7 @@ exports.addData = async(req, res) => {
     }
 };
 
-exports.viewData = async(req, res) => {
+exports.viewData = async (req, res) => {
     console.log('In user viewData');
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryUser', [req.user._id]);
     console.log('result :', result);
@@ -160,8 +160,8 @@ exports.viewData = async(req, res) => {
     }
 };
 
-exports.viewHistory = async(req, res) => {
-    console.log('In user viewHistory', req.user);
+exports.viewHistory = async (req, res) => {
+    console.log('In user viewHistory');
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryUserHistory', [req.user._id]);
     console.log('result :', result.result);
     if (result.status == 1) {
@@ -172,7 +172,7 @@ exports.viewHistory = async(req, res) => {
     }
 };
 
-exports.showInstitutions = async(req, res) => {
+exports.showInstitutions = async (req, res) => {
     console.log('In user showInstitutions');
     let result1 = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'queryAllInstn', [0]);
     console.log('result :', result1.result);
@@ -183,11 +183,11 @@ exports.showInstitutions = async(req, res) => {
     res.render('user/serviceList', { username: req.session.user.username, data: result1.result, status: result2.result.applications });
 };
 
-exports.applyService = async(req, res) => {
+exports.applyService = async (req, res) => {
     console.log('In user applyService', req.body);
     if (req.body.key) {
-
-        let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'addUserApplication', [req.user._id, makeid(6), req.body.key, 0]);
+        var d = new Date();
+        let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'addUserApplication', [req.user._id, makeid(6), req.body.key, 0, d.toISOString()]);
         console.log('result :', result);
         if (result.status == 1) {
             res.render('user/home', { username: req.session.user.username })

@@ -25,6 +25,7 @@ class User extends Contract {
                 dob: '21-10-2020',
                 status: 0,
                 applications: [],
+                date: "2021-01-18T14:02:58.846Z",
             }
         }, {
             key: '5ffec1685eb00973ce6ce819',
@@ -39,8 +40,9 @@ class User extends Contract {
                 dob: '21-10-2020',
                 status: 0,
                 applications: [],
+                date: "2021-01-18T14:02:58.846Z",
             }
-        }, ];
+        },];
         for (let i = 0; i < users.length; i++) {
             users[i].data.docType = 'user';
             await ctx.stub.putState(users[i].key, Buffer.from(JSON.stringify(users[i].data)));
@@ -49,7 +51,7 @@ class User extends Contract {
         console.info('============= END : Initialize Ledger ===========');
     };
 
-    async createUser(ctx, key, name, address, city, district, state, email, phone, dob, status) {
+    async createUser(ctx, key, name, address, city, district, state, email, phone, dob, status, date) {
         console.info('============= START : Create User ===========');
         const user = {
             name,
@@ -62,6 +64,7 @@ class User extends Contract {
             dob,
             status,
             applications: [],
+            date: date,
             docType: 'user',
         };
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(user)));
@@ -100,21 +103,6 @@ class User extends Contract {
         return results;
     };
 
-    async addUserApplication(ctx, key, aplnId, instId, aplnStatus) {
-        console.info('============= START : Add Application ===========');
-        const userAsBytes = await ctx.stub.getState(key);
-        if (!userAsBytes || userAsBytes.length === 0) {
-            throw new Error(`${key} does not exist`);
-        }
-        const user = JSON.parse(userAsBytes.toString());
-        user.applications.push({
-            _id: aplnId,
-            inst: instId,
-            status: aplnStatus,
-        });
-        await ctx.stub.putState(key, Buffer.from(JSON.stringify(user)));
-        console.info('============= END : Add Application ===========');
-    };
     async queryAllUser(ctx) {
         console.info('============= START : Query All User ===========');
         const startKey = '';
@@ -135,6 +123,61 @@ class User extends Contract {
         console.info(allResults);
         console.info('============= END : Query All User ===========');
         return JSON.stringify(allResults);
+    };
+
+    async addUserApplication(ctx, key, aplnId, instId, aplnStatus, date) {
+        console.info('============= START : Add Application ===========');
+        const userAsBytes = await ctx.stub.getState(key);
+        if (!userAsBytes || userAsBytes.length === 0) {
+            throw new Error(`${key} does not exist`);
+        }
+        const user = JSON.parse(userAsBytes.toString());
+        user.applications.push({
+            _id: aplnId,
+            inst: instId,
+            status: aplnStatus,
+        });
+        user.date = date;
+        await ctx.stub.putState(key, Buffer.from(JSON.stringify(user)));
+        console.info('============= END : Add Application ===========');
+    };
+
+    async updateUserStatus(ctx, key, status, date) {
+        console.info('============= START : Update User Status ===========');
+        const userAsBytes = await ctx.stub.getState(key);
+        if (!userAsBytes || userAsBytes.length === 0) {
+            throw new Error(`${key} does not exist`);
+        }
+        const user = JSON.parse(userAsBytes.toString());
+        user.status = status;
+        user.date = date
+        await ctx.stub.putState(key, Buffer.from(JSON.stringify(user)));
+        console.info('============= END : Update User Status ===========');
+    };
+
+    async addUserQualification(ctx, key, aplnId, instId, date) {
+        console.info('============= START : Update addUserQualification ===========');
+        const userAsBytes = await ctx.stub.getState(key);
+        if (!userAsBytes || userAsBytes.length === 0) {
+            throw new Error(`${key} does not exist`);
+        }
+        const user = JSON.parse(userAsBytes.toString());
+        if (user.qualifications) {
+            user.qualifications.push({
+                _id: aplnId,
+                inst: instId,
+                //add more qualification details
+            });
+        } else {
+            user.qualifications = [{
+                _id: aplnId,
+                inst: instId,
+                //add more qualification details
+            }];
+        }
+        user.date = date;
+        await ctx.stub.putState(key, Buffer.from(JSON.stringify(user)));
+        console.info('============= END : Update addUserQualification ===========');
     };
 };
 

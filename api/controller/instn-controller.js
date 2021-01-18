@@ -31,7 +31,7 @@ exports.checkInstn = (req, res, next) => {
     });
 };
 
-exports.register = async(req, res) => {
+exports.register = async (req, res) => {
     console.log('In institution register', req.body);
     if (req.body.orgname && req.body.username && req.body.password) {
         let result = await operator.enrollUser(req.body.orgname, req.body.username);
@@ -66,7 +66,7 @@ exports.register = async(req, res) => {
     }
 };
 
-exports.login = async(req, res) => {
+exports.login = async (req, res) => {
     console.log('In institution login', req.body);
     if (req.body.username && req.body.password) {
         Instn.findOne({ username: req.body.username }, (err, inst) => {
@@ -118,9 +118,10 @@ exports.login = async(req, res) => {
     }
 };
 
-exports.addData = async(req, res) => {
+exports.addData = async (req, res) => {
     console.log('In institution addData', req.body);
     if (req.body.name && req.body.code && req.body.type && req.body.address && req.body.district && req.body.state && req.body.pincode && req.body.phone && req.body.email && req.body.owner) {
+        var d = new Date();
         let result = await operator.createAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'createInstn', [
             req.user._id,
             req.body.name,
@@ -133,7 +134,8 @@ exports.addData = async(req, res) => {
             req.body.phone,
             req.body.email,
             req.body.owner,
-            0
+            0,
+            d.toISOString()
         ]);
         console.log('result : ', result);
         if (result.status == 1) {
@@ -148,7 +150,7 @@ exports.addData = async(req, res) => {
     }
 };
 
-exports.viewData = async(req, res) => {
+exports.viewData = async (req, res) => {
     console.log('In institution viewData');
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'queryInstn', [req.user._id]);
     console.log('result :', result);
@@ -160,34 +162,31 @@ exports.viewData = async(req, res) => {
     }
 };
 
-exports.showPrivilege = async(req, res) => {
+exports.showPrivilege = async (req, res) => {
     console.log('In institution showPrivilege');
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'queryInstn', [req.user._id]);
     console.log('result :', result);
-    console.log('result.result.privileges.length', result.result.privileges.length)
-        //console.log('result.result.privileges.status', result.result.privileges[0].status)
     if (result.status == 1 && result.result.privileges.length == 0) {
         console.log('Prev is empty')
         res.render('instn/requestPrivilege', { username: req.session.user.username, data: result.result, track: 0 })
     } else if (result.status == 1 && result.result.privileges[0].status == 0) {
         console.log('Prev is not empty')
         res.render('instn/requestPrivilege', { username: req.session.user.username, data: result.result, track: 1 })
-
     }
     if (result.status == 1 && result.result.privileges[0].status == 1) {
         console.log('Prev is not empty')
         res.render('instn/requestPrivilege', { username: req.session.user.username, data: result.result, track: 2 })
-
     } else {
         console.log(result.msg);
         return res.status(500).json({ status: 0, msg: result.msg });
     }
 };
 
-exports.requestPrivilege = async(req, res) => {
+exports.requestPrivilege = async (req, res) => {
     console.log('In institution requestPrivilege', req.body);
     if (req.body.desc) {
-        let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'addInstnPrevilege', [req.user._id, makeid(5), req.body.desc, 0]);
+        var d = new Date();
+        let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'addInstnPrevilege', [req.user._id, makeid(5), req.body.desc, 0, d.toISOString()]);
         console.log('result :', result);
         if (result.status == 1) {
             res.redirect('/instn/home');
@@ -199,11 +198,44 @@ exports.requestPrivilege = async(req, res) => {
         console.log('Invalid format');
         return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
     }
+};
+
+exports.viewApplication = async (req, res) => {
+    console.log('In institution viewApplication');
+    let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryAllUser', [0]);
+    console.log('result :', result.result);
+    if (result.status == 1) {
+        res.render('instn/verifyList', { username: req.session.user.username, data: result.result });
+    } else {
+        console.log(result.msg);
+        return res.status(500).json({ status: 0, msg: result.msg });
+    }
+
+};
+
+exports.verifyUser = async (req, res) => {
+    console.log('In institution verifyUser', req.body);
+    if (req.body.key && req.body.status) {
+        var d = new Date();
+        let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'updateUserStatus', [req.body.key, req.body.status, d.toISOString()]);
+        console.log('result :', result);
+        if (result.status == 1) {
+            return res.status(200).json({ status: 1, msg: result.msg });
+        } else {
+            console.log(result.msg);
+            return res.status(500).json({ status: 0, msg: result.msg });
+        }
+    } else {
+        console.log('Invalid format');
+        return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
+    }
 }
-exports.acceptOrRejectPrevilege = async(req, res) => {
-    console.log('In admin acceptOrRejectPrevilege', req.body);
-    if (req.body.key && req.body.pr_id && req.body.status) {
-        let result = await operator.updateAsset('Org2', 'admin', 'mychannel', 'institution', 'updateInstnPrevilege', [req.body.key, req.body.pr_id, req.body.status]);
+
+exports.acceptOrRejectAplcn = async (req, res) => {
+    console.log('In institution acceptOrRejectAplcn', req.body);
+    if (req.body.key && req.body.ap_id && req.body.status) {
+        var d = new Date();
+        let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'addUserQualification', [req.body.key, req.body.ap_id, req.user._id, d.toISOString()]);
         console.log('result :', result);
         if (result.status == 1) {
             //previlege granted result
@@ -216,39 +248,9 @@ exports.acceptOrRejectPrevilege = async(req, res) => {
         return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
     }
 };
-exports.verifyInstitution = async(req, res) => {
-    console.log('In admin verifyInstitution', req.body);
-    if (req.body.key && req.body.status) {
-        let result = await operator.updateAsset('Org2', 'admin', 'mychannel', 'institution', 'updateInstnStatus', [req.body.key, req.body.status]);
-        console.log('result :', result);
-        if (result.status == 1) {
-            return res.status(200).json({ status: 1, msg: result.msg });
-        } else {
-            console.log(result.msg);
-            return res.status(500).json({ status: 0, msg: result.msg });
-        }
-    } else {
-        console.log('Invalid format');
-        return res.status(403).json({ status: 0, msg: 'Invalid Data Format' });
-    }
-};
-exports.viewApplication = async(req, res) => {
 
-    console.log("View Application")
-
-    let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryAllUser', [0]);
-    console.log('result :', result.result);
-    if (result.status == 1) {
-        res.render('instn/verifyList', { username: req.session.user.username, data: result.result });
-    } else {
-        console.log(result.msg);
-        return res.status(500).json({ status: 0, msg: result.msg });
-    }
-
-}
-
-exports.approvedList = async(req, res) => {
-    console.log('Approved List of User');
+exports.approvedList = async (req, res) => {
+    console.log('In institution approvedList');
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'queryAllUser', [0]);
     console.log('result :', result.result);
     if (result.status == 1) {
@@ -257,4 +259,4 @@ exports.approvedList = async(req, res) => {
         console.log(result.msg);
         return res.status(500).json({ status: 0, msg: result.msg });
     }
-}
+};

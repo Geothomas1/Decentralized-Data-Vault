@@ -3,7 +3,7 @@ const FabricCAServices = require('fabric-ca-client');
 const { Gateway, Wallets } = require('fabric-network');
 const helper = require('./helper');
 
-const enrollUser = async(orgname, username) => {
+const enrollUser = async (orgname, username) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
     const ca = new FabricCAServices(caURL);
@@ -79,7 +79,7 @@ const enrollUser = async(orgname, username) => {
     }
 };
 
-const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
+const createAsset = async (orgname, username, channel, chaincode, fcn, args) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
     const ca = new FabricCAServices(caURL);
@@ -102,7 +102,7 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
             switch (fcn) {
 
                 case 'createUser':
-                    var result1 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]);
+                    var result1 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
                     await gateway.disconnect();
                     return {
                         status: 1,
@@ -111,7 +111,7 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
                     };
 
                 case 'createInstn':
-                    var result2 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11]);
+                    var result2 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], args[12]);
                     await gateway.disconnect();
                     return {
                         status: 1,
@@ -144,7 +144,7 @@ const createAsset = async(orgname, username, channel, chaincode, fcn, args) => {
     }
 };
 
-const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
+const queryAsset = async (userorg, username, channel, chaincode, fcn, args) => {
     let ccp = await helper.getCCP(userorg);
     const caURL = await helper.getCaUrl(userorg, ccp);
     const ca = new FabricCAServices(caURL);
@@ -213,7 +213,7 @@ const queryAsset = async(userorg, username, channel, chaincode, fcn, args) => {
     }
 };
 
-const updateAsset = async(orgname, username, channel, chaincode, fcn, args) => {
+const updateAsset = async (orgname, username, channel, chaincode, fcn, args) => {
     let ccp = await helper.getCCP(orgname);
     const caURL = await helper.getCaUrl(orgname, ccp);
     const ca = new FabricCAServices(caURL);
@@ -236,7 +236,7 @@ const updateAsset = async(orgname, username, channel, chaincode, fcn, args) => {
             switch (fcn) {
 
                 case 'addInstnPrevilege':
-                    var result1 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3]);
+                    var result1 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4]);
                     await gateway.disconnect();
                     return {
                         status: 1,
@@ -245,7 +245,7 @@ const updateAsset = async(orgname, username, channel, chaincode, fcn, args) => {
                     };
 
                 case 'updateInstnPrevilege':
-                    var result2 = await contract.submitTransaction(fcn, args[0], args[1], args[2]);
+                    var result2 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3]);
                     await gateway.disconnect();
                     return {
                         status: 1,
@@ -254,7 +254,7 @@ const updateAsset = async(orgname, username, channel, chaincode, fcn, args) => {
                     };
 
                 case 'updateInstnStatus':
-                    var result3 = await contract.submitTransaction(fcn, args[0], args[1]);
+                    var result3 = await contract.submitTransaction(fcn, args[0], args[1], args[2]);
                     await gateway.disconnect();
                     return {
                         status: 1,
@@ -263,7 +263,7 @@ const updateAsset = async(orgname, username, channel, chaincode, fcn, args) => {
                     };
 
                 case 'addUserApplication':
-                    var result4 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3]);
+                    var result4 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4]);
                     await gateway.disconnect();
                     return {
                         status: 1,
@@ -271,6 +271,23 @@ const updateAsset = async(orgname, username, channel, chaincode, fcn, args) => {
                         value: result4
                     };
 
+                case 'updateUserStatus':
+                    var result5 = await contract.submitTransaction(fcn, args[0], args[1], args[2]);
+                    await gateway.disconnect();
+                    return {
+                        status: 1,
+                        msg: `Status updated successfully`,
+                        value: result5
+                    };
+
+                case 'addUserQualification':
+                    var result6 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3]);
+                    await gateway.disconnect();
+                    return {
+                        status: 1,
+                        msg: `Status updated successfully`,
+                        value: result6
+                    };
 
                 default:
                     await gateway.disconnect();

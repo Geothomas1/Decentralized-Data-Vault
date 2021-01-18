@@ -51,11 +51,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <% } %>
-                                <% } %>
-                                    <% } %>
-                                        <% } %>
-                                            <section>
+                        <% } %>
+                    <% } %>
+                <% } %>
+            <% } %>
+        <section>
     </div>
 </body>
 
@@ -67,8 +67,8 @@
         return true;
     };
 
-    function approve(key, name, address, district, state, phone, email, city, status, pr_id, prinst, prstatus) {
-        console.log(key, name, address, district, state, phone, email, city, status, pr_id, prinst, prstatus);
+    function approve(key, name, address, district, state, phone, email, city, status, ap_id, ap_inst, ap_status) {
+        console.log(key, name, address, district, state, phone, email, city, status, ap_id, ap_inst, ap_status);
         if (status == 0) {
             $('#data').html('\
             <table>\
@@ -94,12 +94,12 @@
                 </tr>\
                 <tr>\
                     <th>Application</th>\
-                    <td>' + prinst + '</td>\
+                    <td>' + ap_inst + '</td>\
                 </tr>\
             </table>\
             <div id="arbtn">\
-                <a class="btn btn-success" onclick="aprvrejinst(\'' + key + '\', \'' + pr_id + '\', 1)">Approve User</a>\
-                <a class="btn btn-danger" onclick="aprvrejinst(\'' + key + '\', \'' + pr_id + '\', -1)">Reject User</a>\
+                <a class="btn btn-success" onclick="aprvrejuser(\'' + key + '\', \'' + ap_id + '\', 1)">Approve User</a>\
+                <a class="btn btn-danger" onclick="aprvrejuser(\'' + key + '\', \'' + ap_id + '\', -1)">Reject User</a>\
             </div>\
             ');
         } else {
@@ -127,23 +127,23 @@
                 </tr>\
                 <tr>\
                     <th>Application</th>\
-                    <td>' + prinst + '</td>\
+                    <td>' + ap_inst + '</td>\
                 </tr>\
             </table>\
-            <a class="btn btn-success" onclick="aprvrej(\'' + key + '\', \'' + pr_id + '\', 1)">Accept</a>\
-            <a class="btn btn-danger" onclick="aprvrej(\'' + key + '\', \'' + pr_id + '\', -1)">Reject</a>\
+            <a class="btn btn-success" onclick="aprvrej(\'' + key + '\', \'' + ap_id + '\', 1)">Accept</a>\
+            <a class="btn btn-danger" onclick="aprvrej(\'' + key + '\', \'' + ap_id + '\', -1)">Reject</a>\
             ');
         }
     };
 
-    function aprvrej(key, pr_id, status) {
-        console.log(key, pr_id);
+    function aprvrej(key, ap_id, status) {
+        console.log(key, ap_id);
         $.ajax({
-            url: '/admin/previlege',
+            url: '/instn/viewApplication',
             type: 'POST',
             data: {
                 key: key,
-                pr_id: pr_id,
+                ap_id: ap_id,
                 status: status
             },
             success: function(response, statusText, xhr) {
@@ -161,10 +161,10 @@
         });
     };
 
-    function aprvrejinst(key, pr_id, status) {
-        console.log(key, pr_id, status);
+    function aprvrejuser(key, ap_id, status) {
+        console.log(key, ap_id, status);
         $.ajax({
-            url: '/admin/verifyinstn',
+            url: '/instn/verifyuser',
             type: 'POST',
             data: {
                 key: key,
@@ -175,8 +175,8 @@
                     console.log(response, statusText, xhr);
                     if (status == 1) {
                         $('#arbtn').html('\
-                        <a class="btn btn-success" onclick="aprvrej(\'' + key + '\', \'' + pr_id + '\', 1)">Accept</a>\
-                        <a class="btn btn-danger" onclick="aprvrej(\'' + key + '\', \'' + pr_id + '\', -1)">Reject</a>\
+                        <a class="btn btn-success" onclick="aprvrej(\'' + key + '\', \'' + ap_id + '\', 1)">Accept</a>\
+                        <a class="btn btn-danger" onclick="aprvrej(\'' + key + '\', \'' + ap_id + '\', -1)">Reject</a>\
                     ');
                     } else {
                         //rejected
