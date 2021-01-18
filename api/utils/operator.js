@@ -281,7 +281,7 @@ const updateAsset = async (orgname, username, channel, chaincode, fcn, args) => 
                     };
 
                 case 'addUserQualification':
-                    var result6 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3]);
+                    var result6 = await contract.submitTransaction(fcn, args[0], args[1], args[2], args[3], args[4]);
                     await gateway.disconnect();
                     return {
                         status: 1,

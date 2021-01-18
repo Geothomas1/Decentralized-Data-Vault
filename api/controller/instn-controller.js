@@ -235,7 +235,7 @@ exports.acceptOrRejectAplcn = async (req, res) => {
     console.log('In institution acceptOrRejectAplcn', req.body);
     if (req.body.key && req.body.ap_id && req.body.status) {
         var d = new Date();
-        let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'addUserQualification', [req.body.key, req.body.ap_id, req.user._id, d.toISOString()]);
+        let result = await operator.updateAsset(req.user.organization, req.user.username, 'mychannel', 'user', 'addUserQualification', [req.body.key, req.body.ap_id, req.user._id, req.body.status, d.toISOString()]);
         console.log('result :', result);
         if (result.status == 1) {
             //previlege granted result

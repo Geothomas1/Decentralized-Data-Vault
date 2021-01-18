@@ -155,28 +155,37 @@ class User extends Contract {
         console.info('============= END : Update User Status ===========');
     };
 
-    async addUserQualification(ctx, key, aplnId, instId, date) {
+    async addUserQualification(ctx, key, aplnId, instId, apStatus, date) {
         console.info('============= START : Update addUserQualification ===========');
         const userAsBytes = await ctx.stub.getState(key);
         if (!userAsBytes || userAsBytes.length === 0) {
             throw new Error(`${key} does not exist`);
         }
         const user = JSON.parse(userAsBytes.toString());
-        if (user.qualifications) {
-            user.qualifications.push({
-                _id: aplnId,
-                inst: instId,
-                //add more qualification details
-            });
+        if (status == 1) {
+            if (user.qualifications) {
+                user.qualifications.push({
+                    _id: aplnId,
+                    inst: instId,
+                    //add more qualification details
+                });
+            } else {
+                user.qualifications = [{
+                    _id: aplnId,
+                    inst: instId,
+                    //add more qualification details
+                }];
+            }
+            user.date = date;
+            await ctx.stub.putState(key, Buffer.from(JSON.stringify(user)));
         } else {
-            user.qualifications = [{
-                _id: aplnId,
-                inst: instId,
-                //add more qualification details
-            }];
+            user.applications.forEach(item => {
+                if (item._id == aplnId) {
+                    item.status = apStatus;
+                }
+            });
+            user.date = date
         }
-        user.date = date;
-        await ctx.stub.putState(key, Buffer.from(JSON.stringify(user)));
         console.info('============= END : Update addUserQualification ===========');
     };
 };
