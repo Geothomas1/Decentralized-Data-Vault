@@ -17,11 +17,12 @@ router.get('/home', (req, res) => res.render('instn/home', { username: req.sessi
 
 router.get('/addData', (req, res) => res.render('instn/addData', { username: req.session.user.username }));
 router.post('/addData', instn.checkInstn, instn.addData);
-
+router.get('/viewData', instn.checkInstn, instn.viewData)
 router.get('/privileges', instn.checkInstn, instn.showPrivilege);
 
 
 router.post('/requestPrivilege', instn.checkInstn, instn.requestPrivilege);
 router.get('/viewApplication', instn.checkInstn, instn.viewApplication)
 router.get('/approvedList', instn.checkInstn, instn.approvedList);
+
 module.exports = router;

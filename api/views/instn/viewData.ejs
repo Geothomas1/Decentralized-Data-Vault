@@ -23,10 +23,10 @@
                     <br>
                     <br>
 
-                    <form name="addDataform" method="POST" action="/user/addData" onsubmit="return valForm()">
+                    <form name="addDataform" method="POST" action="/instn/addData" onsubmit="return valForm()">
                         <div class="row">
                             <div class="col col-md-6">
-                                <input name="username" type="text" value="<%= username %>" class="form-control" required readonly>
+                                <input name="username" type="text" value="<%= username %>" placeholder="Username" class="form-control" required readonly>
                             </div>
                         </div>
                         <br>
@@ -40,14 +40,22 @@
                         <br>
                         <div class="row">
                             <div class="col col-md-6">
-                                <input name="address" type="text" value="<%= data.address %>" class="form-control" required>
+                                <input name="code" type="text" value="<%= data.code %>" class="form-control" required>
                             </div>
                         </div>
                         <br>
                         <br>
                         <div class="row">
                             <div class="col col-md-6">
-                                <input name="city" type="text" value="<%= data.city %>" class="form-control" required>
+                                <input name="type" type="text" value="<%= data.type %>" class="form-control" required>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <input name="address" type="text" value="<%= data.address %>" class="form-control" required>
+
                             </div>
                         </div>
                         <br>
@@ -68,7 +76,7 @@
                         <br>
                         <div class="row">
                             <div class="col col-md-6">
-                                <input name="email" type="email" value="<%= data.email %>" class="form-control" required>
+                                <input name="pincode" type="text" value="<%= data.pincode %>" class="form-control" required>
                             </div>
                         </div>
                         <br>
@@ -82,11 +90,19 @@
                         <br>
                         <div class="row">
                             <div class="col col-md-6">
-                                <input name="dob" type="text" value="<%= data.dob %>" class="form-control" required>
+                                <input name="email" type="email" value="<%= data.email %>" class="form-control" required>
                             </div>
                         </div>
                         <br>
                         <br>
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <input name="owner" type="text" value="<%= data.owner %>" class="form-control" required>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+
                         <button type="submit" class="btn btn-primary">Update</button>
                     </form>
                 </div>

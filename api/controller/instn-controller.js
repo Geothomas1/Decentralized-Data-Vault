@@ -153,7 +153,7 @@ exports.viewData = async(req, res) => {
     let result = await operator.queryAsset(req.user.organization, req.user.username, 'mychannel', 'institution', 'queryInstn', [req.user._id]);
     console.log('result :', result);
     if (result.status == 1) {
-        //returning data
+        res.render('instn/viewData', { username: req.session.user.username, data: result.result });
     } else {
         console.log(result.msg);
         return res.status(500).json({ status: 0, msg: result.msg });
