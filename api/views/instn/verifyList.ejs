@@ -51,11 +51,11 @@
                                     </div>
                                 </div>
                             </div>
-                        <% } %>
-                    <% } %>
-                <% } %>
-            <% } %>
-        <section>
+                            <% } %>
+                                <% } %>
+                                    <% } %>
+                                        <% } %>
+                                            <section>
     </div>
 </body>
 
@@ -71,7 +71,15 @@
         console.log(key, name, address, district, state, phone, email, city, status, ap_id, ap_inst, ap_status);
         if (status == 0) {
             $('#data').html('\
+            <section>\
+        <div class="row">\
+            <div class="col-md-6 m-auto">\
+                <div class="container mt-5 pl-5">\
             <table>\
+                <tr>\
+                    <th>Application</th>\
+                    <td>' + ap_inst + '</td>\
+                </tr>\
                 <tr>\
                     <th>Name</th>\
                     <td>' + name + '</td>\
@@ -91,20 +99,28 @@
                 <tr>\
                     <th>Owner</th>\
                     <td>' + city + '</td>\
-                </tr>\
-                <tr>\
-                    <th>Application</th>\
-                    <td>' + ap_inst + '</td>\
                 </tr>\
             </table>\
             <div id="arbtn">\
                 <a class="btn btn-success" onclick="aprvrejuser(\'' + key + '\', \'' + ap_id + '\', 1)">Approve User</a>\
                 <a class="btn btn-danger" onclick="aprvrejuser(\'' + key + '\', \'' + ap_id + '\', -1)">Reject User</a>\
             </div>\
+        </div>\
+            </div>\
+            </div>\
+            </section>\
             ');
         } else {
             $('#data').html('\
+            <section>\
+        <div class="row">\
+            <div class="col-md-6 m-auto">\
+                <div class="container mt-5 pl-5">\
             <table>\
+                <tr>\
+                    <th>Application Id</th>\
+                    <td>' + ap_inst + '</td>\
+                </tr>\
                 <tr>\
                     <th>Name</th>\
                     <td>' + name + '</td>\
@@ -125,13 +141,13 @@
                     <th>Owner</th>\
                     <td>' + city + '</td>\
                 </tr>\
-                <tr>\
-                    <th>Application</th>\
-                    <td>' + ap_inst + '</td>\
-                </tr>\
             </table>\
             <a class="btn btn-success" onclick="aprvrej(\'' + key + '\', \'' + ap_id + '\', 1)">Accept</a>\
             <a class="btn btn-danger" onclick="aprvrej(\'' + key + '\', \'' + ap_id + '\', -1)">Reject</a>\
+        </div>\
+            </div>\
+            </div>\
+            </section>\
             ');
         }
     };

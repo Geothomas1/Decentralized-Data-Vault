@@ -42,7 +42,7 @@ class User extends Contract {
                 applications: [],
                 date: "2021-01-18T14:02:58.846Z",
             }
-        },];
+        }, ];
         for (let i = 0; i < users.length; i++) {
             users[i].data.docType = 'user';
             await ctx.stub.putState(users[i].key, Buffer.from(JSON.stringify(users[i].data)));
@@ -162,7 +162,7 @@ class User extends Contract {
             throw new Error(`${key} does not exist`);
         }
         const user = JSON.parse(userAsBytes.toString());
-        if (status == 1) {
+        if (apStatus == 1) {
             if (user.qualifications) {
                 user.qualifications.push({
                     _id: aplnId,
@@ -178,13 +178,6 @@ class User extends Contract {
             }
             user.date = date;
             await ctx.stub.putState(key, Buffer.from(JSON.stringify(user)));
-        } else {
-            user.applications.forEach(item => {
-                if (item._id == aplnId) {
-                    item.status = apStatus;
-                }
-            });
-            user.date = date
         }
         console.info('============= END : Update addUserQualification ===========');
     };

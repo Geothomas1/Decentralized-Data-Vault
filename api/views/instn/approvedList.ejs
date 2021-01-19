@@ -19,24 +19,24 @@
         <div class="container mt-5">
             <div class="row">
                 <% for(var i=0; i < data.length; i++){ %>
-                    <!-- <% if (data[i].Record.applications.length > 0) { %>
+                    <% if (data[i].Record.applications.length > 0) { %>
                         <% for(var j=0; j < data[i].Record.applications.length; j++){ %>
-                            <% if (data[i].Record.applications[j].status==1) { %> -->
-                    <div class="col-md-4 p-3">
-                        <div style="width: 20rem;">
-                            <img class="card-img-top" src="/images/user.png" alt="Enter data" style="width:100px;height:100px;">
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    <%= data[i].Record.name %>
-                                </h5>
-                                <button type="button" class="btn btn-warning">More</button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- <% } %>
-                        <% } %>
-                    <% } %> -->
-                    <% } %>
+                            <% if (data[i].Record.applications[j].status==1) { %>
+                                <div class="col-md-4 p-3">
+                                    <div style="width: 20rem;">
+                                        <img class="card-img-top" src="/images/user.png" alt="Enter data" style="width:100px;height:100px;">
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                                <%= data[i].Record.name %>
+                                            </h5>
+                                            <button type="button" class="btn btn-warning">More</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
+                                    <% } %>
+                                        <% } %>
+                                            <% } %>
             </div>
         </div>
     </section>
